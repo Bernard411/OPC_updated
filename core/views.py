@@ -27,7 +27,7 @@ def create_leave_request(request):
         leave_request.save()
 
         messages.success(request, 'Your leave request has been submitted and is pending approval.')
-        return redirect('leave_request_list')
+        return redirect('homepage')
     
     leave_requests = LeaveRequest.objects.all()
 
@@ -126,7 +126,7 @@ def supervisor_approval(request, leave_request_id):
                 )
                 messages.success(request, 'Leave request approved and forwarded to Head of Section.')
 
-            return redirect('leave_request_list')
+            return redirect('supervisor_dashboard')
 
         return render(request, 'sp/supervisor_approval.html', {
             'leave_request': leave_request,
@@ -136,7 +136,7 @@ def supervisor_approval(request, leave_request_id):
 
     else:
         messages.error(request, 'You are not authorized to approve this leave request or it is not at the correct stage.')
-        return redirect('leave_request_list')
+        return redirect('supervisor_dashboard')
 @login_required
 def head_of_section_approval(request, leave_request_id):
     leave_request = get_object_or_404(LeaveRequest, id=leave_request_id)
@@ -168,7 +168,7 @@ def head_of_section_approval(request, leave_request_id):
                 )
                 messages.success(request, 'Leave request approved successfully.')
 
-            return redirect('leave_request_list')
+            return redirect('head_of_section_dashboard')
 
         return render(request, 'hd/head_of_section_approval.html', {
             'leave_request': leave_request,
@@ -179,7 +179,7 @@ def head_of_section_approval(request, leave_request_id):
 
     else:
         messages.error(request, 'Leave request cannot be approved by you at this stage.')
-        return redirect('leave_request_list')
+        return redirect('head_of_section_dashboard')
 
 
 from django.shortcuts import render
