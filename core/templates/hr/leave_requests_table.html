@@ -2,7 +2,7 @@
 
 {% include 'head.html' %}
 <body class="g-sidenav-show  bg-gray-100" style="zoom: 60%;">
-  {% include 'side2.html' %}
+  {% include 'side3.html' %}
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
     <!-- Navbar -->
     <nav class="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
@@ -49,16 +49,32 @@
 
        
     </style>
-    {% comment %} <div class="mb-3">
-        <input type="text" id="tableFilter" class="form-control" placeholder="Search...">
-    </div> {% endcomment %}
-    <input type="text" style="width: 100%" id="tableFilter"  placeholder="Search by employee name..." />
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Check if zoom level is already stored in localStorage
+            const savedZoomLevel = localStorage.getItem("zoomLevel");
+    
+            // If a zoom level exists, apply it
+            if (savedZoomLevel) {
+                document.body.style.zoom = savedZoomLevel;
+            } else {
+                // If no zoom level is saved, apply the default (80%)
+                document.body.style.zoom = "70%";
+                localStorage.setItem("zoomLevel", "70%");  // Store the zoom level in localStorage
+            }
+        });
+    </script>
+
+        
+        <input type="text" id="filter-input" style="width:100%"  placeholder="Search by employee name, status, or date">
+  
+
     <div class="card my-4 mt-5">
           
       <div class="card-body" style="background-color: #e1e2e2;">
         <h3 class="mb-0 h4 font-weight-bolder" style="font-weight: bold; font-family:Poppins;">
             <img src="{% static 'mw.png' %}" class="navbar-brand-img" width="26" height="26" alt="main_logo">
-            Supervisor Dashboard - Leave Requests</h1></h3>
+        Application</h3>
      
      
               <style>
@@ -135,86 +151,44 @@
           </head>
           
           
-                 
-          <div class="conta" >
-    <!-- Search Input -->
-
-<!-- Table -->
-<table class="table table-striped table-bordered">
-    <thead class="table">
-        <tr>
-            <th>Employee Name</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Status</th>
-            <th>HR Approved</th>
-            <th>Supervisor Approved</th>
-            <th>Head Approved</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody id="leaveTableBody">
-        {% for request in page_obj %}
-        <tr>
-            <td>{{ request.employee.name }}</td>
-            <td>{{ request.start_date }}</td>
-            <td>{{ request.end_date }}</td>
-            <td>
-                <span class="badge 
-                    {% if request.status == 'HR Approved' %} bg-success 
-                    {% else %} bg-warning text-dark {% endif %}">
-                    {{ request.status }}
-                </span>
-            </td>
-            <td>{% if request.status == 'HR Approved' %} Approved {% else %} Pending {% endif %}</td>
-            <td>
-                {% if request.supervisor_approval %}
-                    <span class="badge 
-                        {% if request.supervisor_approval.approval_status == 'Approved' %} bg-success 
-                        {% else %} bg-danger {% endif %}">
-                        {{ request.supervisor_approval.approval_status }}
-                    </span>
-                {% else %}
-                    <span class="badge bg-warning text-dark">Pending</span>
-                {% endif %}
-            </td>
-            <td>
-                {% if request.head_approval %}
-                    <span class="badge 
-                        {% if request.head_approval.approval_status == 'Approved' %} bg-success 
-                        {% else %} bg-danger {% endif %}">
-                        {{ request.head_approval.approval_status }}
-                    </span>
-                {% else %}
-                    <span class="badge bg-warning text-dark">Pending</span>
-                {% endif %}
-            </td>
-            <td>
-                {% if request.status == 'HR Approved' %}
-                <a href="{% url 'supervisor_approval' request.id %}" class="btn btn-sm btn-success">
-                    <i class="fas fa-check-circle"></i> Approve
-                </a>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-
-<script>
-    document.getElementById('tableFilter').addEventListener('input', function () {
-        const filter = this.value.toLowerCase();
-        const rows = document.querySelectorAll('#leaveTableBody tr');
-
-        rows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            const rowText = Array.from(cells).map(cell => cell.textContent.toLowerCase()).join(' ');
-            row.style.display = rowText.includes(filter) ? '' : 'none';
-        });
-    });
-</script>
-
+      
+            <!-- Leave Requests Table -->
+            <table id="leave-requests-table" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Employee Name</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in page_obj %}
+                    <tr>
+                        <td>{{ request.employee_name }}</td>
+                        <td>{{ request.start_date }}</td>
+                        <td>{{ request.end_date }}</td>
+                        <td>
+                            <span class="badge 
+                                {% if request.status == 'Approved by Head' %} bg-success 
+                                {% else %} bg-warning text-dark {% endif %}">
+                                {{ request.status }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if request.download_enabled %}
+                            <a href="{% url 'generate_leave_form_view' request.id %}" class="btn btn-sm btn-primary  w-100">
+                                <i class="fas fa-download"></i> Download PDF
+                            </a>
+                            {% else %}
+                            <button class="btn btn-sm btn-secondary disabled w-100 text-black" style="color:black;">Awaiting Head Approval</button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         
             <!-- Pagination Controls -->
             <nav aria-label="Page navigation">
@@ -230,13 +204,13 @@
                         <span class="page-link">&laquo;</span>
                     </li>
                     {% endif %}
-            
+        
                     {% for num in page_obj.paginator.page_range %}
                     <li class="page-item {% if page_obj.number == num %}active{% endif %}">
                         <a class="page-link" href="?page={{ num }}">{{ num }}</a>
                     </li>
                     {% endfor %}
-            
+        
                     {% if page_obj.has_next %}
                     <li class="page-item">
                         <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
@@ -250,32 +224,40 @@
                     {% endif %}
                 </ul>
             </nav>
-            <style>
-                /* Change active pagination color to blue */
-                .pagination .page-item.active .page-link {
-                    background-color: #007bff !important; /* Bootstrap primary blue */
-                    border-color: #007bff !important;
-                    color: white !important;
-                }
-            
-                /* Custom hover effect for pagination links */
-                .pagination .page-link:hover {
-                    background-color: #0056b3; /* Darker blue for hover */
-                    color: white;
-                }
-            
-                /* Custom focus style */
-                .pagination .page-link:focus {
-                    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-                }
-            </style>
-                        
         </div>
+        <style>
+            /* Change active pagination color to blue */
+            .pagination .page-item.active .page-link {
+                background-color: #007bff !important; /* Bootstrap primary blue */
+                border-color: #007bff !important;
+                color: white !important;
+            }
         
-              </div>
-          
-         
-          </body>
+            /* Custom hover effect for pagination links */
+            .pagination .page-link:hover {
+                background-color: #0056b3; /* Darker blue for hover */
+                color: white;
+            }
+        
+            /* Custom focus style */
+            .pagination .page-link:focus {
+                box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            }
+        </style>
+        
+        <!-- JavaScript for Filtering -->
+        <script>
+            document.getElementById('filter-input').addEventListener('keyup', function () {
+                let filterValue = this.value.toLowerCase();
+                let tableRows = document.querySelectorAll('#leave-requests-table tbody tr');
+        
+                tableRows.forEach(function (row) {
+                    let rowText = row.textContent.toLowerCase();
+                    row.style.display = rowText.includes(filterValue) ? '' : 'none';
+                });
+            });
+        </script>
+        
           
           </html>
           
@@ -307,3 +289,5 @@
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="{% static 'assets/js/material-dashboard.min.js' %}"></script>
+</body>
+

@@ -185,6 +185,21 @@
                 </form>
             </div>
         </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                // Check if zoom level is already stored in localStorage
+                const savedZoomLevel = localStorage.getItem("zoomLevel");
+        
+                // If a zoom level exists, apply it
+                if (savedZoomLevel) {
+                    document.body.style.zoom = savedZoomLevel;
+                } else {
+                    // If no zoom level is saved, apply the default (80%)
+                    document.body.style.zoom = "70%";
+                    localStorage.setItem("zoomLevel", "70%");  // Store the zoom level in localStorage
+                }
+            });
+        </script>
         
               </div>
           

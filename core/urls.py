@@ -16,4 +16,9 @@ urlpatterns = [
        path('logout_user/', views.logoutuser, name="logout_user"),
     path('success/', views.success_page, name='success'),
      path('home/', views.home, name='homepage'),
+
+
+   path('hr/leave-requests/', views.leave_requests_table_hr, name='leave_requests_table_hr'),
+    path('sp/leave-requests/', views.leave_requests_table_sp, name='leave_requests_table_sp'),
+    path('hd/leave-requests/', views.leave_requests_table_hd, name='leave_requests_table_hd'),
 ]

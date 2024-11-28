@@ -242,6 +242,89 @@ def leave_requests_table(request):
 
     return render(request, 'leave_requests_table.html', {'leave_requests': leave_requests_data})
 
+from django.core.paginator import Paginator
+from django.shortcuts import render
+
+def leave_requests_table_hr(request):
+    leave_requests = LeaveRequest.objects.all()
+
+    leave_requests_data = []
+    for leave in leave_requests:
+        head_approved = leave.leaveapproval_set.filter(
+            approver_role__role_name='Head of Department',
+            approval_status='Approved'
+        ).exists()
+
+        leave_requests_data.append({
+            'id': leave.id,
+            'employee_name': leave.employee.name,
+            'start_date': leave.start_date,
+            'end_date': leave.end_date,
+            'status': "Approved by Head" if head_approved else "Pending",
+            'download_enabled': head_approved,
+        })
+
+    # Paginate the leave requests data
+    paginator = Paginator(leave_requests_data, 10)  # Show 10 items per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'hr/leave_requests_table.html', {'page_obj': page_obj})
+
+
+def leave_requests_table_sp(request):
+    leave_requests = LeaveRequest.objects.all()
+
+    leave_requests_data = []
+    for leave in leave_requests:
+        head_approved = leave.leaveapproval_set.filter(
+            approver_role__role_name='Head of Department',
+            approval_status='Approved'
+        ).exists()
+
+        leave_requests_data.append({
+            'id': leave.id,
+            'employee_name': leave.employee.name,
+            'start_date': leave.start_date,
+            'end_date': leave.end_date,
+            'status': "Approved by Head" if head_approved else "Pending",
+            'download_enabled': head_approved,
+        })
+
+    paginator = Paginator(leave_requests_data, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'sp/leave_requests_table.html', {'page_obj': page_obj})
+
+
+def leave_requests_table_hd(request):
+    leave_requests = LeaveRequest.objects.all()
+
+    leave_requests_data = []
+    for leave in leave_requests:
+        head_approved = leave.leaveapproval_set.filter(
+            approver_role__role_name='Head of Department',
+            approval_status='Approved'
+        ).exists()
+
+        leave_requests_data.append({
+            'id': leave.id,
+            'employee_name': leave.employee.name,
+            'start_date': leave.start_date,
+            'end_date': leave.end_date,
+            'status': "Approved by Head" if head_approved else "Pending",
+            'download_enabled': head_approved,
+        })
+
+    paginator = Paginator(leave_requests_data, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'hd/leave_requests_table.html', {'page_obj': page_obj})
+
+
+
 
 
 from django.shortcuts import render
@@ -275,12 +358,19 @@ def hr_dashboard(request):
     else:
         return redirect('home')  # Redirect to home if not HR
 
+from django.core.paginator import Paginator
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .models import LeaveRequest
 
 @login_required
 def supervisor_dashboard(request):
     if request.user.employee.post and request.user.employee.post.role_name == 'Supervisor':  # Check if the user is Supervisor
         leave_requests = LeaveRequest.objects.filter(status='HR Approved')  # Only show HR-approved requests
-        return render(request, 'sp/supervisor_dashboard.html', {'leave_requests': leave_requests})
+        paginator = Paginator(leave_requests, 10)  # Show 10 leave requests per page
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, 'sp/supervisor_dashboard.html', {'page_obj': page_obj})
     else:
         return redirect('home')  # Redirect to home if not Supervisor
 
