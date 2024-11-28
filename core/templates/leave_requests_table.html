@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Requests</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <h1>Leave Requests</h1>
+    <img src="{% static 'mw.png' %}" alt="Logo" style="width: 90px; margin-bottom: 4px;">
+    <table>
+        <thead>
+            <tr>
+                <th>Employee Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for request in leave_requests %}
+            <tr>
+                <td>{{ request.employee_name }}</td>
+                <td>{{ request.start_date }}</td>
+                <td>{{ request.end_date }}</td>
+                <td>{{ request.status }}</td>
+                <td>
+                    <p>Debug: Download Enabled = {{ request.download_enabled }}</p> <!-- Debug line -->
+                    {% if request.download_enabled %}
+                    <a href="{% url 'generate_leave_form_view' request.id %}" class="btn">Download PDF</a>
+                    {% else %}
+                    <button class="btn disabled">Awaiting Head Approval</button>
+                    {% endif %}
+                </td>
+            </tr>
+            
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

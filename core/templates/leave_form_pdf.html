@@ -1,0 +1,151 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Office of the President and Cabinet</title>
+    <style>
+        body {
+            font-family: "Times New Roman", Times, serif;
+            margin: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 1px solid #000;
+            margin-bottom: 10px;
+        }
+
+        .row {
+            display: flex;
+            margin-bottom: 15px;  /* Increased margin between rows */
+        }
+
+        .row div {
+            width: 33%;
+            display: inline-block;
+            padding: 10px;  /* Increased padding to create space between details */
+            box-sizing: border-box;
+        }
+
+        .row .label {
+            font-weight: bold;
+        }
+
+        .signature {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .signature div {
+            width: 30%;
+            text-align: center;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+       <center><img src="http://127.0.0.1:8000/static/mw.png" alt="Logo" style="width: 70px;"></center>
+
+        <h1>Office of the President and Cabinet</h1>
+
+        <!-- Employee Information Section -->
+        <div class="section">
+            <div class="section-title">Employee Information</div>
+            <div class="row">
+                <div><span class="label">Name:</span> {{ name|default:"Not Provided" }}</div>
+                <div><span class="label">Grade:</span> {{ grade|default:"Not Provided" }}</div>
+                <div><span class="label">Post:</span> {{ post|default:"Not Provided" }}</div>
+            </div>
+            <div class="row">
+                <div><span class="label">Employment No.:</span> {{ employment_no|default:"Not Provided" }}</div>
+                <div><span class="label">Bank Name:</span> {{ bank_name|default:"Not Provided" }}</div>
+                <div><span class="label">Account No.:</span> {{ account_no|default:"Not Provided" }}</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Leave Details</div>
+            <p>
+                Subject to the exigencies of the service, I wish to apply for leave days, 
+                to start on <strong>{{ start_date|default:"Not Provided" }}</strong> and finish on <strong>{{ end_date|default:"Not Provided" }}</strong>. 
+                I shall return to duty on <strong>{{ return_date|default:"Not Provided" }}</strong>. My annual entitlement is 
+                <strong>{{ annual_entitlement|default:"Not Provided" }}</strong> days. Number of days previously taken: 
+                <strong>{{ previously_taken|default:"Not Provided" }}</strong>. Number of days now remaining: 
+                <strong>{{ remaining_days|default:"Not Provided" }}</strong>. While on leave, my contact address will be: 
+                <strong>{{ contact_address|default:"Not Provided" }}</strong>.
+            </p>
+        </div>
+
+        <!-- Leave Grant Section -->
+        <div class="section">
+            <div class="section-title">Leave Grant</div>
+            <p>I apply for a leave grant of: {{ leave_grant|default:"Not Provided" }}</p>
+            <p style="display: flex; justify-content: space-between; align-items: center;">Date: {{ application_date|default:"Not Provided" }}    Signed: {{ employee_signature|default:"Not Provided" }}</p>
+        </div>
+
+        <!-- HR Section -->
+        <div class="section">
+            <div class="section-title">PART B: Human Resource Section</div>
+            <p>Previously taken: {{ hr_previous|default:"Not Provided" }} days, Remaining: {{ hr_remaining|default:"Not Provided" }} days</p>
+            <p>Date: {{ hr_date|default:"Not Provided" }}    Signed: {{ hr_signature|default:"Not Provided" }}</p>
+        </div>
+
+        <!-- Supervisor Section -->
+        <div class="section">
+            <div class="section-title">PART C: Supervisor of the Officer</div>
+            <p>I recommend/do not recommend the grant of leave from {{ start_date|default:"Not Provided" }} to {{ end_date|default:"Not Provided" }}.</p>
+            <p>Signature of Supervising Officer: {{ supervisor_signature|default:"Not Provided" }}    Date: {{ supervisor_date|default:"Not Provided" }}</p>
+        </div>
+
+        <!-- Head of Section -->
+        <div class="section">
+            <div class="section-title">PART D: Head of Section</div>
+            <p>Approved/Not Approved: {{ head_approval|default:"Not Provided" }}</p>
+            <p>Signature of Head of Section: {{ head_signature|default:"Not Provided" }}    Date: {{ head_date|default:"Not Provided" }}</p>
+        </div>
+
+        <!-- Signature Section -->
+        <div class="signature">
+            <div>
+                <p>HR Signature</p>
+                <p>______________________</p>
+            </div>
+            <div>
+                <p>Supervisor Signature</p>
+                <p>______________________</p>
+            </div>
+            <div>
+                <p>Head of Section Signature</p>
+                <p>______________________</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Leave Request Form - Office of the President and Cabinet</p>
+        </div>
+    </div>
+</body>
+</html>

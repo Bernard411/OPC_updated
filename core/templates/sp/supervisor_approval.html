@@ -1,0 +1,248 @@
+{% load static %}
+
+{% include 'head.html' %}
+<body class="g-sidenav-show  bg-gray-100" style="zoom: 60%;">
+  {% include 'side2.html' %}
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
+      <div class="container-fluid py-1 px-3">
+ 
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+    <div class="container-fluid py-2">
+      <div class="row">
+        <div class="ms-3">
+          <h3 class="mb-0 h4 font-weight-bolder" style="font-weight: bold; font-family:Poppins;">
+           
+            Office of President and Cabinet</h3>
+          <p class="mb-4" style="font-weight: bold; font-family:Poppins;">
+           leave application system
+          </p>
+   
+        
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Check if zoom level is already stored in localStorage
+            const savedZoomLevel = localStorage.getItem("zoomLevel");
+    
+            // If a zoom level exists, apply it
+            if (savedZoomLevel) {
+                document.body.style.zoom = savedZoomLevel;
+            } else {
+                // If no zoom level is saved, apply the default (80%)
+                document.body.style.zoom = "70%";
+                localStorage.setItem("zoomLevel", "70%");  // Store the zoom level in localStorage
+            }
+        });
+    </script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+           
+            font-size: small;
+        }
+
+       
+    </style>
+
+   
+    <div class="card my-4 mt-5">
+          
+      <div class="card-body" style="background-color: #e1e2e2;">
+        
+        <h3 class="mb-0 h4 font-weight-bolder" style="font-weight: bold; font-family:Poppins;">
+            <img src="{% static 'mw.png' %}" class="navbar-brand-img" width="26" height="26" alt="main_logo">
+            Application Approval</h1></h3>
+     
+     
+              <style>
+                  table {
+                      width: 100%;
+                      border-collapse: collapse;
+                      margin: 20px 0;
+                      background-color: white;
+                  }
+          
+                  th,
+                  td {
+                      padding: 10px;
+                      text-align: left;
+                      border: 1px solid #ddd;
+                  }
+          
+                  th {
+                      background-color: grey;
+                      color: white;
+                  }
+          
+                  tr:nth-child(even) {
+                      background-color: #f2f2f2;
+                  }
+          
+                  .status-approved {
+                      color: green;
+                      font-weight: bold;
+                      font-size: small;
+                  }
+          
+                  .status-pending {
+                      color: orange;
+                      font-weight: bold;
+                      font-size: small;
+                  }
+          
+                  .status-rejected {
+                      color: green;
+                      font-weight: bold;
+                      font-size: small;
+                  }
+          
+                  .btn {
+                      padding: 5px 10px;
+                      background-color: #0056b3;
+                      color: white;
+                      font-size: small;
+                      border: none;
+                      border-radius: 5px;
+                      cursor: pointer;
+                  }
+          
+                  .btn.disabled {
+                      background-color: #ccc;
+                      cursor: not-allowed;
+                  }
+          
+                  /* Add striped effect */
+                  tr:nth-child(odd) {
+                      background-color: #f9f9f9;
+                  }
+          
+                  /* Style the filtering input */
+                  #filterInput {
+                      margin-bottom: 20px;
+                      padding: 10px;
+                      font-size: 1rem;
+                      border: 1px solid #ddd;
+                      border-radius: 5px;
+                  }
+              </style>
+          </head>
+          
+          
+                 
+          
+          <h1></h1>
+
+       
+            <!-- Leave Request Details -->
+            <div class="card p-3 mb-4 shadow-sm">
+                <h4>Leave Request Details</h4>
+                <p style="background-color: #e1e2e2;"><strong>Employee:</strong> {{ leave_request.employee.name }}</p>
+                <p><strong>Start Date:</strong> {{ leave_request.start_date }}</p>
+                <p><strong>End Date:</strong> {{ leave_request.end_date }}</p>
+                <p><strong>Number of Days:</strong> {{ leave_request.number_of_days }}</p>
+                <p><strong>Status:</strong> 
+                    {% if leave_request.status == 'Approved' %}
+                        <span class="badge bg-success">{{ leave_request.status }}</span>
+                    {% elif leave_request.status == 'Rejected' %}
+                        <span class="badge bg-danger">{{ leave_request.status }}</span>
+                    {% else %}
+                        <span class="badge bg-warning text-dark">{{ leave_request.status }}</span>
+                    {% endif %}
+                </p>
+        
+                {% if leave_request.status != 'Pending' %}
+                    <p><strong>HR Comments:</strong> {% if hr_approval %}{{ hr_approval.comments }}{% else %}No comments{% endif %}</p>
+                    <p><strong>Supervisor Comments:</strong> {% if supervisor_approval %}{{ supervisor_approval.comments }}{% else %}No comments{% endif %}</p>
+                {% endif %}
+            </div>
+        
+            <!-- Approval Form -->
+            <div class="card p-3 shadow-sm">
+                <h5>Approval Form</h5>
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="approval_status" class="form-label" style="background-color: #e1e2e2;">Approval Status:</label>
+                        <select id="approval_status" name="approval_status" class="form-control" style="background-color: #e1e2e2;" required>
+                            <option value="Approved">Approve</option>
+                            <option value="Rejected">Reject</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="comments" class="form-label">Comments:</label>
+                        <textarea id="comments" name="comments" class="form-control" rows="4" style="background-color: #e1e2e2;"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">Submit</button>
+                </form>
+            </div>
+        </div>
+        
+              </div>
+          
+              <script>
+                  // JavaScript function to filter the table rows based on the input value
+                  function filterTable() {
+                      let input, filter, table, tr, td, i, txtValue;
+                      input = document.getElementById("filterInput");
+                      filter = input.value.toUpperCase();
+                      table = document.getElementById("leaveTable");
+                      tr = table.getElementsByTagName("tr");
+          
+                      for (i = 1; i < tr.length; i++) {
+                          td = tr[i].getElementsByTagName("td")[0]; // Search only in the first column (Employee Name)
+                          if (td) {
+                              txtValue = td.textContent || td.innerText;
+                              if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                  tr[i].style.display = "";
+                              } else {
+                                  tr[i].style.display = "none";
+                              }
+                          }
+                      }
+                  }
+              </script>
+          </body>
+          
+          </html>
+          
+</body>
+</html>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!--   Core JS Files   -->
+  <script src="{% static 'assets/js/core/popper.min.js' %}"></script>
+  <script src="{% static 'assets/js/core/bootstrap.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/perfect-scrollbar.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/smooth-scrollbar.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/chartjs.min.js' %}"></script>
+  
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="{% static 'assets/js/material-dashboard.min.js' %}"></script>
+
+<body>
+   
+</body>
