@@ -55,7 +55,7 @@
               <h3 class="mb-0 h4 font-weight-bolder" style="font-weight: bold; font-family:Poppins;">
                   <img src="{% static 'mw.png' %}" class="navbar-brand-img" width="26" height="26" alt="main_logo">
                   HR Dashboard - Create Employee</h3>
-<form method="POST" action="{% url 'register' %}">
+<form method="POST" action="{% url 'register' %}" style="margin-top: 2px;">
     {% csrf_token %}
     <div class="form-field">
         {{ form.username.label_tag }}

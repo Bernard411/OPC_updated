@@ -353,8 +353,13 @@ def hr_dashboard(request):
             leave_request.hr_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='HR').first()
             leave_request.supervisor_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='Supervisor').first()
             leave_request.head_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='Head of Department').first()
+        
+        paginator = Paginator(leave_requests, 10)  # Show 10 leave requests per page
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        
 
-        return render(request, 'hr/hr_dashboard.html', {'leave_requests': leave_requests})
+        return render(request, 'hr/hr_dashboard.html', {'leave_requests': leave_requests, "page_obj":page_obj})
     else:
         return redirect('home')  # Redirect to home if not HR
 
@@ -646,7 +651,15 @@ def employee_list(request):
     employees = Employee.objects.select_related('user', 'post').all()
     for employee in employees:
         employee.role_name = employee.post.role_name if employee.post else 'N/A'
-    return render(request, 'hr/emp.html', {'employees': employees})
+
+    paginator = Paginator(employees, 10)  # Show 10 leave requests per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {
+        "page_obj" : page_obj
+
+    }
+    return render(request, 'hr/emp.html', context)
 
 
 from django.shortcuts import get_object_or_404, redirect
