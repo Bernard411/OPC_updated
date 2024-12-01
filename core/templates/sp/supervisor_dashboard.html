@@ -5,12 +5,7 @@
   {% include 'side2.html' %}
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
     <!-- Navbar -->
-    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
-      <div class="container-fluid py-1 px-3">
- 
-        </div>
-      </div>
-    </nav>
+    {% include 'nav.html' %}
     <!-- End Navbar -->
     <div class="container-fluid py-2">
       <div class="row">
@@ -49,9 +44,11 @@
 
        
     </style>
-    {% comment %} <div class="mb-3">
-        <input type="text" id="tableFilter" class="form-control" placeholder="Search...">
-    </div> {% endcomment %}
+   
+    <span style="font-weight: bold;">
+        <i class="fa fa-filter" aria-hidden="true"></i> Filter Data
+    </span>
+    
     <input type="text" style="width: 100%" id="tableFilter"  placeholder="Search by employee name..." />
     <div class="card my-4 mt-5">
           
@@ -140,66 +137,69 @@
     <!-- Search Input -->
 
 <!-- Table -->
-<table class="table table-striped table-bordered">
-    <thead class="table">
-        <tr>
-            <th>Employee Name</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Status</th>
-            <th>HR Approved</th>
-            <th>Supervisor Approved</th>
-            <th>Head Approved</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody id="leaveTableBody">
-        {% for request in page_obj %}
-        <tr>
-            <td>{{ request.employee.name }}</td>
-            <td>{{ request.start_date }}</td>
-            <td>{{ request.end_date }}</td>
-            <td>
-                <span class="badge 
-                    {% if request.status == 'HR Approved' %} bg-success 
-                    {% else %} bg-warning text-dark {% endif %}">
-                    {{ request.status }}
-                </span>
-            </td>
-            <td>{% if request.status == 'HR Approved' %} Approved {% else %} Pending {% endif %}</td>
-            <td>
-                {% if request.supervisor_approval %}
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-sm">
+        <thead>
+            <tr>
+                <th>Employee Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+                <th>HR Approved</th>
+                <th>Supervisor Approved</th>
+                <th>Head Approved</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="leaveTableBody">
+            {% for request in page_obj %}
+            <tr>
+                <td>{{ request.employee.name }}</td>
+                <td>{{ request.start_date }}</td>
+                <td>{{ request.end_date }}</td>
+                <td>
                     <span class="badge 
-                        {% if request.supervisor_approval.approval_status == 'Approved' %} bg-success 
-                        {% else %} bg-danger {% endif %}">
-                        {{ request.supervisor_approval.approval_status }}
+                        {% if request.status == 'HR Approved' %} bg-success 
+                        {% else %} bg-warning text-dark {% endif %}">
+                        {{ request.status }}
                     </span>
-                {% else %}
-                    <span class="badge bg-warning text-dark">Pending</span>
-                {% endif %}
-            </td>
-            <td>
-                {% if request.head_approval %}
-                    <span class="badge 
-                        {% if request.head_approval.approval_status == 'Approved' %} bg-success 
-                        {% else %} bg-danger {% endif %}">
-                        {{ request.head_approval.approval_status }}
-                    </span>
-                {% else %}
-                    <span class="badge bg-warning text-dark">Pending</span>
-                {% endif %}
-            </td>
-            <td>
-                {% if request.status == 'HR Approved' %}
-                <a href="{% url 'supervisor_approval' request.id %}" class="btn btn-sm btn-success">
-                    <i class="fas fa-check-circle"></i> Approve
-                </a>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+                </td>
+                <td>{% if request.status == 'HR Approved' %} Approved {% else %} Pending {% endif %}</td>
+                <td>
+                    {% if request.supervisor_approval %}
+                        <span class="badge 
+                            {% if request.supervisor_approval.approval_status == 'Approved' %} bg-success 
+                            {% else %} bg-danger {% endif %}">
+                            {{ request.supervisor_approval.approval_status }}
+                        </span>
+                    {% else %}
+                        <span class="badge bg-warning text-dark">Pending</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if request.head_approval %}
+                        <span class="badge 
+                            {% if request.head_approval.approval_status == 'Approved' %} bg-success 
+                            {% else %} bg-danger {% endif %}">
+                            {{ request.head_approval.approval_status }}
+                        </span>
+                    {% else %}
+                        <span class="badge bg-warning text-dark">Pending</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if request.status == 'HR Approved' %}
+                    <a href="{% url 'supervisor_approval' request.id %}" class="btn btn-sm btn-success">
+                        <i class="fas fa-check-circle"></i> Approve
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 
 
 <script>
