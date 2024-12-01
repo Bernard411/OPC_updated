@@ -619,7 +619,7 @@ def leave_request_handler(request):
             comments=comments
         )
         
-        return redirect('success_page')  # Redirect after successful submission
+        return redirect('hr_dashboard')  # Redirect after successful submission
     return redirect('leave_request_form')
 
 
