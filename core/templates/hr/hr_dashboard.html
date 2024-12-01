@@ -101,20 +101,7 @@
                       font-size: small;
                   }
           
-                  .btn {
-                      padding: 5px 10px;
-                      background-color: #0056b3;
-                      color: white;
-                      font-size: small;
-                      border: none;
-                      border-radius: 5px;
-                      cursor: pointer;
-                  }
-          
-                  .btn.disabled {
-                      background-color: #ccc;
-                      cursor: not-allowed;
-                  }
+              
           
                   /* Add striped effect */
                   tr:nth-child(odd) {
@@ -179,7 +166,7 @@
         
                         <td>
                             {% if request.status == 'Pending' %}
-                                <a href="{% url 'hr_approval' request.id %}">Approve / Reject</a>
+                                <a href="{% url 'hr_approval' request.id %}" class="btn btn-success w-100">Approve / Reject</a>
                             {% endif %}
                         </td>
                     </tr>

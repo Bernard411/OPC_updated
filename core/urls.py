@@ -21,4 +21,8 @@ urlpatterns = [
    path('hr/leave-requests/', views.leave_requests_table_hr, name='leave_requests_table_hr'),
     path('sp/leave-requests/', views.leave_requests_table_sp, name='leave_requests_table_sp'),
     path('hd/leave-requests/', views.leave_requests_table_hd, name='leave_requests_table_hd'),
+    path('leave-requestx/', views.leave_request_view, name='leave_request_form'),
+    
+    # URL for handling the submission of the leave request form
+    path('submit-leave-requestx/', views.leave_request_handler, name='leave_request_handler'),
 ]

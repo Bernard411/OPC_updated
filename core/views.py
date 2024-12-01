@@ -427,7 +427,7 @@ def register(request):
     else:
         form = RegistrationForm()
 
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'hr/register.html', {'form': form})
 
 # views.py
 # from .forms import EmailAuthenticationForm
@@ -585,3 +585,52 @@ def generate_leave_form_view(request, leave_id):
         return HttpResponse("Error generating PDF", status=500)
 
     return response
+
+
+from django.shortcuts import redirect
+from .models import LeaveRequest, LeaveApproval, Employee
+
+def leave_request_handler(request):
+    if request.method == 'POST':
+        employee_id = request.POST['employee']
+        employee = Employee.objects.get(id=employee_id)
+        
+        # Create Leave Request
+        leave_request = LeaveRequest.objects.create(
+            employee=employee,
+            start_date=request.POST['start_date'],
+            end_date=request.POST['end_date'],
+            number_of_days=request.POST['number_of_days'],
+            contact_address_during_leave=request.POST.get('contact_address_during_leave', ''),
+            leave_grant_requested=request.POST.get('leave_grant_requested', '')
+        )
+        
+        # Add Approval
+        approver_id = request.POST['approver']
+        approver = Employee.objects.get(id=approver_id)
+        approval_status = request.POST['approval_status']
+        comments = request.POST.get('comments', '')
+        
+        LeaveApproval.objects.create(
+            leave_request=leave_request,
+            approver=approver,
+            approver_role=approver.post,
+            approval_status=approval_status,
+            comments=comments
+        )
+        
+        return redirect('success_page')  # Redirect after successful submission
+    return redirect('leave_request_form')
+
+
+from django.shortcuts import render
+from .models import Employee, Role
+
+def leave_request_view(request):
+    employees = Employee.objects.all()  # All employees
+    approvers = Employee.objects.filter(post__role_name__in=['HR', 'Supervisor', 'Head of Department'])  # Approvers
+    
+    return render(request, 'hr/create.html', {
+        'employees': employees,
+        'approvers': approvers,
+    })

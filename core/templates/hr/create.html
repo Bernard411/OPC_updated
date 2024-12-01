@@ -1,0 +1,237 @@
+{% load static %}
+
+{% include 'head.html' %}
+<body class="g-sidenav-show  bg-gray-100" style="zoom: 60%;">
+  {% include 'side3.html' %}
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
+      <div class="container-fluid py-1 px-3">
+ 
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+    <div class="container-fluid py-2">
+      <div class="row">
+        <div class="ms-3">
+          <h3 class="mb-0 h4 font-weight-bolder" style="font-weight: bold; font-family:Poppins;">
+           
+            Office of President and Cabinet</h3>
+          <p class="mb-4" style="font-weight: bold; font-family:Poppins;">
+           leave application system
+          </p>
+   
+        
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Check if zoom level is already stored in localStorage
+            const savedZoomLevel = localStorage.getItem("zoomLevel");
+    
+            // If a zoom level exists, apply it
+            if (savedZoomLevel) {
+                document.body.style.zoom = savedZoomLevel;
+            } else {
+                // If no zoom level is saved, apply the default (80%)
+                document.body.style.zoom = "70%";
+                localStorage.setItem("zoomLevel", "70%");  // Store the zoom level in localStorage
+            }
+        });
+    </script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+           
+            font-size: small;
+        }
+
+       
+    </style>
+        <div class="card my-4 mt-5">
+          
+            <div class="card-body" style="background-color: #e1e2e2;">
+              <h3 class="mb-0 h4 font-weight-bolder" style="font-weight: bold; font-family:Poppins;">
+                  <img src="{% static 'mw.png' %}" class="navbar-brand-img" width="26" height="26" alt="main_logo">
+                  HR Dashboard - Create Direct Leave</h3>
+                  <form method="POST" action="{% url 'leave_request_handler' %}">
+                    {% csrf_token %}
+                    
+                    <!-- User Selection -->
+                    <fieldset>
+                        <legend>Employee Information</legend>
+                        <label for="employee">Select Employee:</label>
+                        <select id="employee" name="employee" required>
+                            <option value="" selected>-- Select Employee --</option>
+                            {% for employee in employees %}
+                                <option value="{{ employee.id }}">{{ employee.name }} ({{ employee.user.username }})</option>
+                            {% endfor %}
+                        </select>
+                    </fieldset>
+                    
+                    <!-- Leave Request Details -->
+                    <fieldset>
+                        <legend>Leave Request Details</legend>
+                        <label for="start_date">Start Date:</label>
+                        <input type="date" id="start_date" name="start_date" required>
+                        
+                        <label for="end_date">End Date:</label>
+                        <input type="date" id="end_date" name="end_date" required>
+                        
+                        <label for="number_of_days">Number of Days:</label>
+                        <input type="number" id="number_of_days" name="number_of_days" required>
+                        
+                        <label for="contact_address_during_leave">Contact Address During Leave:</label>
+                        <textarea id="contact_address_during_leave" name="contact_address_during_leave" rows="3"></textarea>
+                        
+                        <label for="leave_grant_requested">Leave Grant Requested:</label>
+                        <input type="text" id="leave_grant_requested" name="leave_grant_requested">
+                    </fieldset>
+                    
+                    <!-- Approval Section -->
+                    <fieldset>
+                        <legend>Approval Workflow</legend>
+                        <label for="approver">Approver:</label>
+                        <select id="approver" name="approver" required>
+                            <option value="" selected>-- Select Approver --</option>
+                            {% for approver in approvers %}
+                                <option value="{{ approver.id }}">{{ approver.name }} ({{ approver.post.role_name }})</option>
+                            {% endfor %}
+                        </select>
+                        
+                        <label for="approval_status">Approval Status:</label>
+                        <select id="approval_status" name="approval_status" required>
+                            <option value="Pending">Pending</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                        
+                        <label for="comments">Comments:</label>
+                        <textarea id="comments" name="comments" rows="3"></textarea>
+                    </fieldset>
+                    
+                    <!-- Submit Button -->
+                    <div class="d-grid">
+                        <button type="submit" class="submit-button">Submit Leave Request</button>
+                    </div>
+                </form>
+                
+
+<style>
+    /* General Form Styling */
+form {
+   width: 1005;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+/* Fieldset Styling */
+fieldset {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+legend {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Labels and Inputs */
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+input, select, textarea {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Submit Button */
+button.submit-button {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.submit-button:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    form {
+        padding: 15px;
+    }
+
+    input, select, textarea {
+        width: calc(100% - 10px);
+    }
+}
+
+
+</style>
+                </div>
+         
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!--   Core JS Files   -->
+  <script src="{% static 'assets/js/core/popper.min.js' %}"></script>
+  <script src="{% static 'assets/js/core/bootstrap.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/perfect-scrollbar.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/smooth-scrollbar.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/chartjs.min.js' %}"></script>
+  
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="{% static 'assets/js/material-dashboard.min.js' %}"></script>

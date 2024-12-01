@@ -1,0 +1,185 @@
+{% load static %}
+
+{% include 'head.html' %}
+<body class="g-sidenav-show  bg-gray-100" style="zoom: 60%;">
+  {% include 'side3.html' %}
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
+      <div class="container-fluid py-1 px-3">
+ 
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+    <div class="container-fluid py-2">
+      <div class="row">
+        <div class="ms-3">
+          <h3 class="mb-0 h4 font-weight-bolder" style="font-weight: bold; font-family:Poppins;">
+           
+            Office of President and Cabinet</h3>
+          <p class="mb-4" style="font-weight: bold; font-family:Poppins;">
+           leave application system
+          </p>
+   
+        
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Check if zoom level is already stored in localStorage
+            const savedZoomLevel = localStorage.getItem("zoomLevel");
+    
+            // If a zoom level exists, apply it
+            if (savedZoomLevel) {
+                document.body.style.zoom = savedZoomLevel;
+            } else {
+                // If no zoom level is saved, apply the default (80%)
+                document.body.style.zoom = "70%";
+                localStorage.setItem("zoomLevel", "70%");  // Store the zoom level in localStorage
+            }
+        });
+    </script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+           
+            font-size: small;
+        }
+
+       
+    </style>
+        <div class="card my-4 mt-5">
+          
+            <div class="card-body" style="background-color: #e1e2e2;">
+              <h3 class="mb-0 h4 font-weight-bolder" style="font-weight: bold; font-family:Poppins;">
+                  <img src="{% static 'mw.png' %}" class="navbar-brand-img" width="26" height="26" alt="main_logo">
+                  HR Dashboard - Create Employee</h3>
+<form method="POST" action="{% url 'register' %}">
+    {% csrf_token %}
+    <div class="form-field">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+    </div>
+    <div class="form-field">
+        {{ form.email.label_tag }}
+        {{ form.email }}
+    </div>
+    <div class="form-field">
+        {{ form.password.label_tag }}
+        {{ form.password }}
+    </div>
+    <div class="form-field">
+        {{ form.name.label_tag }}
+        {{ form.name }}
+    </div>
+    <div class="form-field">
+        {{ form.grade.label_tag }}
+        {{ form.grade }}
+    </div>
+    <div class="form-field">
+        {{ form.role.label_tag }}
+        {{ form.role }}
+    </div>
+    <div class="form-field">
+        {{ form.employment_no.label_tag }}
+        {{ form.employment_no }}
+    </div>
+    <div class="form-field">
+        {{ form.contact_address.label_tag }}
+        {{ form.contact_address }}
+    </div>
+    <div class="form-field">
+        {{ form.bank_name.label_tag }}
+        {{ form.bank_name }}
+    </div>
+    <div class="form-field">
+        {{ form.bank_account_no.label_tag }}
+        {{ form.bank_account_no }}
+    </div>
+    <div class="form-field">
+        {{ form.annual_leave_entitlement.label_tag }}
+        {{ form.annual_leave_entitlement }}
+    </div>
+    <div class="d-grid">
+        <button type="submit" class="submit-button">Register</button>
+    </div>
+</form>
+
+<style>
+    form {
+    width: 100%;
+    
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.form-field {
+    margin-bottom: 15px;
+}
+
+.form-field label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-field input, .form-field select, .form-field textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.d-grid {
+    text-align: center;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
+
+</style>
+                </div>
+         
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!--   Core JS Files   -->
+  <script src="{% static 'assets/js/core/popper.min.js' %}"></script>
+  <script src="{% static 'assets/js/core/bootstrap.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/perfect-scrollbar.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/smooth-scrollbar.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/chartjs.min.js' %}"></script>
+  
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="{% static 'assets/js/material-dashboard.min.js' %}"></script>
