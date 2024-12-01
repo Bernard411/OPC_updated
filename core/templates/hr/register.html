@@ -52,9 +52,9 @@
         <div class="card my-4 mt-5">
           
             <div class="card-body" style="background-color: #e1e2e2;">
-              <h3 class="mb-0 h4 font-weight-bolder" style="font-weight: bold; font-family:Poppins;">
-                  <img src="{% static 'mw.png' %}" class="navbar-brand-img" width="26" height="26" alt="main_logo">
-                  HR Dashboard - Create Employee</h3>
+                <span style="font-weight: bold;">
+                    <i class="fa fa-user" aria-hidden="true"></i> <b>Create Employee</b>
+                </span>
 <form method="POST" action="{% url 'register' %}" style="margin-top: 2px;">
     {% csrf_token %}
     <div class="form-field">
@@ -102,7 +102,7 @@
         {{ form.annual_leave_entitlement }}
     </div>
     <div class="d-grid">
-        <button type="submit" class="submit-button">Register</button>
+        <button type="submit" class="btn btn-success btn-sm">Register</button>
     </div>
 </form>
 

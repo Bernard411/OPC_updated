@@ -50,6 +50,9 @@
    
 </style>
 
+<span style="font-weight: bold;">
+    <i class="fa fa-filter" aria-hidden="true"></i> Filter Data
+</span>
 
 
 
@@ -186,43 +189,61 @@
                  
           <!-- Search Input -->
 
-<!-- Your Table -->
-<table id="employeeTable" class="table table-striped table-bordered">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Username</th>
-            <th>Grade</th>
-            <th>Role</th>
-            <th>Employment No</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for employee in page_obj %}
-        <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>{{ employee.name }}</td>
-            <td>{{ employee.user.username }}</td>
-            <td>{{ employee.get_grade_display }}</td>
-            <td>{{ employee.role_name }}</td>
-            <td>{{ employee.employment_no }}</td>
-            <td>
-                <!-- Edit Button -->
-                <form method="GET" action="{% url 'edit_employee' employee.id %}" style="display: inline;">
-                    <button type="submit" class="edit-button btn btn-success">Edit</button>
-                </form>
-                <!-- Delete Button -->
-                <form method="POST" action="{% url 'delete_employee' employee.id %}" style="display: inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="delete-button btn btn-danger" onclick="return confirm('Are you sure you want to delete this employee?')">Delete</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<!-- Your Table --><!-- Your Employee Table with Icons and Responsiveness -->
+<div class="table-responsive">
+    <table id="employeeTable" class="table table-striped table-bordered table-sm">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Grade</th>
+                <th>Role</th>
+                <th>Employment No</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in page_obj %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ employee.name }}</td>
+                <td>{{ employee.user.username }}</td>
+                <td>{{ employee.get_grade_display }}</td>
+                <td>{{ employee.role_name }}</td>
+                <td>{{ employee.employment_no }}</td>
+                <td>
+                    <!-- Edit Icon Button -->
+                    <form method="GET" action="{% url 'edit_employee' employee.id %}" style="display: inline;">
+                        <button type="submit" class="edit-button btn btn-success btn-sm" style="border: none; padding: 5px;">
+                            <i class="fa fa-edit" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                    <!-- Delete Icon Button -->
+                    <form method="POST" action="{% url 'delete_employee' employee.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-button btn btn-danger btn-sm" style="border: none; padding: 5px;" onclick="return confirm('Are you sure you want to delete this employee?')">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Optional custom styles to reduce the size further -->
+<style>
+    #employeeTable {
+        font-size: 0.85rem; /* Smaller font size */
+    }
+
+    #employeeTable th, #employeeTable td {
+        padding: 5px 10px; /* Reduced padding */
+    }
+</style>
+
 <style>
     /* Change active pagination color to blue */
     .pagination .page-item.active .page-link {

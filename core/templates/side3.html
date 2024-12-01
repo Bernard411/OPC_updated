@@ -13,89 +13,51 @@
    <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
      <ul class="navbar-nav">
      
-       <li class="nav-item">
-         <a href="{% url 'hr_dashboard' %}" class="nav-link text-dark  {% if request.path == '/hr-dashboard/' %}active  bg-gradient-dark text-white {% endif %}">
-           <i class="material-symbols-rounded opacity-5">table_view</i>
-           <span class="nav-link-text ms-1">Leave Requests</span>
-         </a>
-       </li>
-
-       <li class="nav-item">
-        <a href="{% url 'register' %}" class="nav-link text-dark  {% if request.path == '/hr/leave-requests/' %}active  bg-gradient-dark text-white {% endif %}">
-          <i class="material-symbols-rounded opacity-5">table_view</i>
+      <li class="nav-item">
+        <a href="{% url 'hr_dashboard' %}" class="nav-link text-dark {% if request.path == '/hr-dashboard/' %}active bg-gradient-dark text-white {% endif %}">
+          <i class="material-symbols-rounded opacity-5">dashboard</i>
+          <span class="nav-link-text ms-1">Leave Requests</span>
+        </a>
+      </li>
+      
+      <li class="nav-item">
+        <a href="{% url 'register' %}" class="nav-link text-dark {% if request.path == '/register/' %}active bg-gradient-dark text-white {% endif %}">
+          <i class="material-symbols-rounded opacity-5">person_add</i>
           <span class="nav-link-text ms-1">Create Employee</span>
         </a>
       </li>
-
+      
       <li class="nav-item">
-        <a href="{% url 'employee_list' %}" class="nav-link text-dark  {% if request.path == '/hr/leave-requests/' %}active  bg-gradient-dark text-white {% endif %}">
-          <i class="material-symbols-rounded opacity-5">table_view</i>
+        <a href="{% url 'employee_list' %}" class="nav-link text-dark {% if request.path == '/employees/' %}active bg-gradient-dark text-white {% endif %}">
+          <i class="material-symbols-rounded opacity-5">people</i>
           <span class="nav-link-text ms-1">Manage Employees</span>
         </a>
       </li>
-
+      
       <li class="nav-item">
-        <a href="{% url 'leave_request_form' %}" class="nav-link text-dark  {% if request.path == '/hr/leave-requests/' %}active  bg-gradient-dark text-white {% endif %}">
-          <i class="material-symbols-rounded opacity-5">table_view</i>
+        <a href="{% url 'leave_request_form' %}" class="nav-link text-dark {% if request.path == '/leave-requestx/' %}active bg-gradient-dark text-white {% endif %}">
+          <i class="material-symbols-rounded opacity-5">event_available</i>
           <span class="nav-link-text ms-1">Create Leave</span>
         </a>
       </li>
-
-       <li class="nav-item">
-        <a href="{% url 'leave_requests_table_hr' %}" class="nav-link text-dark  {% if request.path == '/hr/leave-requests/' %}active  bg-gradient-dark text-white {% endif %}">
-          <i class="material-symbols-rounded opacity-5">table_view</i>
+      
+      <li class="nav-item">
+        <a href="{% url 'leave_requests_table_hr' %}" class="nav-link text-dark {% if request.path == '/hr/leave-requests/' %}active bg-gradient-dark text-white {% endif %}">
+          <i class="material-symbols-rounded opacity-5">cloud_download</i>
           <span class="nav-link-text ms-1">Downloads</span>
         </a>
       </li>
-  
-  
-       <li class="nav-item">
-         <a class="nav-link text-dark" href="{% url 'logout_user' %}">
-           <i class="material-symbols-rounded opacity-5">login</i>
-           <span class="nav-link-text ms-1">Logout </span>
-         </a>
-       </li>
+      
+      <li class="nav-item">
+        <a class="nav-link text-dark" href="{% url 'logout_user' %}">
+          <i class="material-symbols-rounded opacity-5">logout</i>
+          <span class="nav-link-text ms-1">Logout</span>
+        </a>
+      </li>
+      
        <style>
         /* From Uiverse.io by alexroumi */ 
-button {
-padding: 15px 25px;
-border: unset;
-border-radius: 15px;
-color: #212121;
-z-index: 1;
-background: #e8e8e8;
-position: relative;
-font-weight: 1000;
-font-size: 17px;
--webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-transition: all 250ms;
-overflow: hidden;
-}
-
-button::before {
-content: "";
-position: absolute;
-top: 0;
-left: 0;
-height: 100%;
-width: 0;
-border-radius: 15px;
-background-color: #212121;
-z-index: -1;
--webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-transition: all 250ms
-}
-
-button:hover {
-color: #e8e8e8;
-}
-
-button:hover::before {
-width: 100%;
-}
-    </style>
+</style>
      </ul>
    </div>
    <div class="sidenav-footer position-absolute w-100 bottom-0 ">
