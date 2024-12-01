@@ -25,4 +25,10 @@ urlpatterns = [
     
     # URL for handling the submission of the leave request form
     path('submit-leave-requestx/', views.leave_request_handler, name='leave_request_handler'),
+
+    path('employees/', views.employee_list, name='employee_list'),  # List all employees
+    path('employees/edit/<int:employee_id>/', views.edit_employee, name='edit_employee'),  # Edit employee
+    path('employees/delete/<int:employee_id>/', views.delete_employee, name='delete_employee'),  # Delete employee
 ]
+
+

@@ -634,3 +634,51 @@ def leave_request_view(request):
         'employees': employees,
         'approvers': approvers,
     })
+
+
+from django.shortcuts import render
+from .models import Employee
+
+from django.shortcuts import render
+from .models import Employee
+
+def employee_list(request):
+    employees = Employee.objects.select_related('user', 'post').all()
+    for employee in employees:
+        employee.role_name = employee.post.role_name if employee.post else 'N/A'
+    return render(request, 'hr/emp.html', {'employees': employees})
+
+
+from django.shortcuts import get_object_or_404, redirect
+
+def delete_employee(request, employee_id):
+    employee = get_object_or_404(Employee, id=employee_id)
+    employee.user.delete()  # This will delete the user as well
+    employee.delete()
+    return redirect('employee_list')
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.models import User
+from .models import Employee
+from django.contrib.auth.hashers import make_password
+
+def edit_employee(request, employee_id):
+    employee = get_object_or_404(Employee, id=employee_id)
+
+    if request.method == 'POST':
+        employee.name = request.POST['name']
+        employee.grade = request.POST['grade']
+        employee.employment_no = request.POST['employment_no']
+        employee.contact_address = request.POST['contact_address']
+        employee.bank_name = request.POST['bank_name']
+        employee.bank_account_no = request.POST['bank_account_no']
+
+        # Change Password
+        if request.POST.get('password'):
+            employee.user.password = make_password(request.POST['password'])
+            employee.user.save()
+
+        employee.save()
+        return redirect('employee_list')
+
+    return render(request, 'hr/edit_employee.html', {'employee': employee})
