@@ -14,6 +14,7 @@
     <!-- End Navbar -->
     <div class="container-fluid py-2">
       <div class="row">
+        
         <div class="ms-3">
           <h3 class="mb-0 h4 font-weight-bolder" style="font-weight: bold; font-family:Poppins;">
            
@@ -102,20 +103,7 @@
                       font-size: small;
                   }
           
-                  .btn {
-                      padding: 5px 10px;
-                      background-color: #0056b3;
-                      color: white;
-                      font-size: small;
-                      border: none;
-                      border-radius: 5px;
-                      cursor: pointer;
-                  }
-          
-                  .btn.disabled {
-                      background-color: #ccc;
-                      cursor: not-allowed;
-                  }
+               
           
                   /* Add striped effect */
                   tr:nth-child(odd) {
@@ -166,7 +154,7 @@
           
                           <td>
                               {% if request.status == 'Supervisor Approved' %}
-                                  <a href="{% url 'head_of_section_approval' request.id %}">Approve / Reject</a>
+                                  <a href="{% url 'head_of_section_approval' request.id %}" class="btn btn-success w-100">Approve / Reject</a>
                               {% endif %}
                           </td>
                       </tr>
