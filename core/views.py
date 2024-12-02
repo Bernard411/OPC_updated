@@ -878,3 +878,148 @@ def user_profile_hd(request):
 
         
     })
+
+
+import openpyxl
+from django.http import HttpResponse
+from .models import Employee
+
+def export_employees_to_excel(request):
+    # Create a workbook and add a worksheet
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Employees"
+
+    # Define the header row
+    headers = [
+        "Name",
+        "Grade",
+        "Post",
+        "Employment No",
+        "Contact Address",
+        "Bank Name",
+        "Bank Account No",
+        "Annual Leave Entitlement",
+        "Leave Days Taken",
+    ]
+    ws.append(headers)
+
+    # Query the Employee model and populate the worksheet
+    for employee in Employee.objects.all():
+        row = [
+            employee.name,
+            employee.get_grade_display(),
+            employee.post.role_name if employee.post else "N/A",
+            employee.employment_no,
+            employee.contact_address,
+            employee.bank_name,
+            employee.bank_account_no,
+            employee.annual_leave_entitlement,
+            employee.leave_days_taken,
+        ]
+        ws.append(row)
+
+    # Set up the HTTP response with content disposition
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+    response["Content-Disposition"] = 'attachment; filename="employees.xlsx"'
+
+    # Save the workbook to the response
+    wb.save(response)
+
+    return response
+
+
+import openpyxl
+from django.http import HttpResponse
+from .models import LeaveRequest, LeaveApproval
+
+def export_leave_requests_to_excel(request):
+    # Create a workbook and add a worksheet
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Leave Requests"
+
+    # Define the header row
+    headers = [
+        "Employee Name",
+        "Start Date",
+        "End Date",
+        "Number of Days",
+        "Contact Address",
+        "Leave Grant Requested",
+        "Status",
+        "Submission Date",
+        "Days Remaining",
+    ]
+    ws.append(headers)
+
+    # Query the LeaveRequest model and populate the worksheet
+    for leave_request in LeaveRequest.objects.all():
+        row = [
+            leave_request.employee.name,
+            leave_request.start_date,
+            leave_request.end_date,
+            leave_request.number_of_days,
+            leave_request.contact_address_during_leave or "N/A",
+            leave_request.leave_grant_requested or "N/A",
+            leave_request.status,
+            leave_request.submission_date.strftime('%Y-%m-%d %H:%M:%S'),
+            leave_request.days_remaining(),
+        ]
+        ws.append(row)
+
+    # Set up the HTTP response with content disposition
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+    response["Content-Disposition"] = 'attachment; filename="leave_requests.xlsx"'
+
+    # Save the workbook to the response
+    wb.save(response)
+
+    return response
+
+
+def export_leave_approvals_to_excel(request):
+    # Create a workbook and add a worksheet
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Leave Approvals"
+
+    # Define the header row
+    headers = [
+        "Leave Request ID",
+        "Employee Name",
+        "Approver Name",
+        "Approver Role",
+        "Approval Status",
+        "Comments",
+        "Action Date",
+    ]
+    ws.append(headers)
+
+    # Query the LeaveApproval model and populate the worksheet
+    for approval in LeaveApproval.objects.all():
+        row = [
+            approval.leave_request.id,
+            approval.leave_request.employee.name,
+            approval.approver.name,
+            approval.approver_role.role_name,
+            approval.approval_status,
+            approval.comments or "N/A",
+            approval.action_date.strftime('%Y-%m-%d %H:%M:%S'),
+        ]
+        ws.append(row)
+
+    # Set up the HTTP response with content disposition
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+    response["Content-Disposition"] = 'attachment; filename="leave_approvals.xlsx"'
+
+    # Save the workbook to the response
+    wb.save(response)
+
+    return response

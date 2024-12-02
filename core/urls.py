@@ -34,6 +34,10 @@ urlpatterns = [
     path('profile/sp', views.user_profile_sp, name='user_profile_sp'),
     path('profile/hd', views.user_profile_hd, name='user_profile_hd'),
 
+    path("export-leave-requests/", views.export_leave_requests_to_excel, name="export_leave_requests"),
+    path("export-leave-approvals/", views.export_leave_approvals_to_excel, name="export_leave_approvals"),
+    path("export-employees/", views.export_employees_to_excel, name="export_employees"),
+
 ]
 
 
