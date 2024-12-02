@@ -1023,3 +1023,52 @@ def export_leave_approvals_to_excel(request):
     wb.save(response)
 
     return response
+
+
+import pandas as pd
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import ExcelUploadForm
+from .models import Role, Employee
+
+def upload_employees_excel(request):
+    if request.method == "POST":
+        form = ExcelUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            excel_file = request.FILES["file"]
+            try:
+                # Read the Excel file
+                data = pd.read_excel(excel_file)
+
+                # Validate columns
+                required_columns = ["Name", "Grade", "Role", "Employment No", "Contact Address", "Bank Name", "Bank Account No", "Annual Leave Entitlement"]
+                for column in required_columns:
+                    if column not in data.columns:
+                        raise ValueError(f"Missing required column: {column}")
+
+                # Process rows
+                for _, row in data.iterrows():
+                    # Create or fetch Role
+                    role, _ = Role.objects.get_or_create(role_name=row["Role"])
+
+                    # Create Employee
+                    Employee.objects.create(
+                        name=row["Name"],
+                        grade=row["Grade"],
+                        post=role,
+                        employment_no=row["Employment No"],
+                        contact_address=row["Contact Address"],
+                        bank_name=row["Bank Name"],
+                        bank_account_no=row["Bank Account No"],
+                        annual_leave_entitlement=int(row["Annual Leave Entitlement"]),
+                        leave_days_taken=int(row.get("Leave Days Taken", 0)),
+                    )
+
+                messages.success(request, "Employees imported successfully!")
+                return redirect("upload_employees_excel")
+            except Exception as e:
+                messages.error(request, f"Error processing the file: {e}")
+    else:
+        form = ExcelUploadForm()
+
+    return render(request, "upload.html", {"form": form})

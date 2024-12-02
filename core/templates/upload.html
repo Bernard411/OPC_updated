@@ -1,3 +1,4 @@
+
 {% load static %}
 
 {% include 'head.html' %}
@@ -202,18 +203,13 @@
        
     </style>
 
-<span style="font-weight: bold;">
-    <i class="fa fa-filter" aria-hidden="true"></i> Filter Data
-</span>
 
-
-<input type="text" id="searchInput" onkeyup="filterTable()" class="w-100 " placeholder="Search for leave requests...">
     <div class="card my-4 mt-5">
    
       <div class="card-body" style="background-color: #e1e2e2;">
         <h3 class="mb-0 h4 font-weight-bolder" style="font-weight: bold; font-family:Poppins;">
             <img src="{% static 'mw.png' %}" class="navbar-brand-img" width="26" height="26" alt="main_logo">
-            HR Dashboard - Leave Requests</h3>
+            Upload - User Data</h3>
      
      
               <style>
@@ -280,49 +276,20 @@
     <!-- Search Input -->
 
 <!-- Your Leave Requests Table -->
-<div class="table-responsive">
-    <table border="1" id="employee-table" class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Employee Name</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Status</th>
-                <th>Supervisor Approval</th>
-                <th>Head Approval</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for request in page_obj %}
-            <tr>
-                <td>{{ request.employee.name }}</td>
-                <td>{{ request.start_date }}</td>
-                <td>{{ request.end_date }}</td>
-                <td>{{ request.status }}</td>
-                <td>
-                    {% if request.supervisor_approval %}
-                        {{ request.supervisor_approval.approval_status }}
-                    {% else %}
-                        Pending
-                    {% endif %}
-                </td>
-                <td>
-                    {% if request.head_approval %}
-                        {{ request.head_approval.approval_status }}
-                    {% else %}
-                        Pending
-                    {% endif %}
-                </td>
-                <td>
-                    {% if request.status == 'Pending' %}
-                        <a href="{% url 'hr_approval' request.id %}" class="btn btn-success btn-sm">Approve / Reject</a>
-                    {% endif %}
-                </td>
-            </tr>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success w-100">Upload</button>
+    </form>
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li class="alert alert-{{ message.tags }}">{{ message }}</li>
             {% endfor %}
-        </tbody>
-    </table>
+        </ul>
+    {% endif %}
+    
 </div>
 
 <!-- JavaScript to Filter Table -->
@@ -358,39 +325,7 @@
     });
 </script>
 
-          <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-                {% if page_obj.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">&laquo;</span>
-                </li>
-                {% endif %}
-    
-                {% for num in page_obj.paginator.page_range %}
-                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-                </li>
-                {% endfor %}
-    
-                {% if page_obj.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">&raquo;</span>
-                </li>
-                {% endif %}
-            </ul>
-        </nav>
+     
     </div>
     <style>
         /* Change active pagination color to blue */
@@ -477,3 +412,5 @@
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="{% static 'assets/js/material-dashboard.min.js' %}"></script>
+
+

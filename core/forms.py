@@ -58,3 +58,8 @@ class PasswordChangeForm(forms.Form):
         if new_password != confirm_password:
             raise forms.ValidationError("New passwords do not match.")
         return cleaned_data
+
+from django import forms
+
+class ExcelUploadForm(forms.Form):
+    file = forms.FileField(label="Upload Excel File")
