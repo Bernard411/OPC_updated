@@ -11,14 +11,14 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('', views.login_view, name='login_view' ),
     path('leave/request/', views.create_leave_request, name='submit_leave_request'),
-   path('generate-pdf/<int:leave_id>/', views.generate_leave_form_view, name='generate_leave_form_view'),
-   path('leave-requests/', views.leave_requests_table, name='leave_requests_table'),
-       path('logout_user/', views.logoutuser, name="logout_user"),
+    path('generate-pdf/<int:leave_id>/', views.generate_leave_form_view, name='generate_leave_form_view'),
+    path('leave-requests/', views.leave_requests_table, name='leave_requests_table'),
+    path('logout_user/', views.logoutuser, name="logout_user"),
     path('success/', views.success_page, name='success'),
-     path('home/', views.home, name='homepage'),
+    path('home/', views.home, name='homepage'),
 
 
-   path('hr/leave-requests/', views.leave_requests_table_hr, name='leave_requests_table_hr'),
+    path('hr/leave-requests/', views.leave_requests_table_hr, name='leave_requests_table_hr'),
     path('sp/leave-requests/', views.leave_requests_table_sp, name='leave_requests_table_sp'),
     path('hd/leave-requests/', views.leave_requests_table_hd, name='leave_requests_table_hd'),
     path('leave-requestx/', views.leave_request_view, name='leave_request_form'),
@@ -30,6 +30,7 @@ urlpatterns = [
     path('employees/edit/<int:employee_id>/', views.edit_employee, name='edit_employee'),  # Edit employee
     path('employees/delete/<int:employee_id>/', views.delete_employee, name='delete_employee'),  # Delete employee
     path('profile/', views.user_profile, name='user_profile'),
+     
     path('profile/hr', views.user_profile_hr, name='user_profile_hr'),
     path('profile/sp', views.user_profile_sp, name='user_profile_sp'),
     path('profile/hd', views.user_profile_hd, name='user_profile_hd'),

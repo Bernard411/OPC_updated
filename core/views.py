@@ -764,6 +764,9 @@ def user_profile(request):
 
     })
 
+
+
+
 def user_profile_hr(request):
     if request.method == 'POST':
         # Handling user info update (username, email)
