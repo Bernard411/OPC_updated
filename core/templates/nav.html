@@ -32,10 +32,12 @@
           </li> -->
          
           <li class="nav-item d-flex align-items-center">
-            <a href="{% url 'user_profile' %}" class="nav-link text-body font-weight-bold px-0">
+            <a href="{% if user.profile.role == 'HR' %}{% url 'user_profile_hr' %}{% elif user.profile.role == 'Supervisor' %}{% url 'user_profile_sp' %}{% elif user.profile.role == 'Head of Department' %}{% url 'user_profile_hd' %}{% else %}{% url 'user_profile' %}{% endif %}" class="nav-link text-body font-weight-bold px-0">
               <i class="material-symbols-rounded">account_circle</i>
-            </a>
-            <span style="font-weight: bold;">{{user.email}}</span>
+          </a>
+          <span style="font-weight: bold;">{{ user.email }}</span>
+          
+          
           </li>
         </ul>
       </div>

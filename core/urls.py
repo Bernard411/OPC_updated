@@ -30,6 +30,10 @@ urlpatterns = [
     path('employees/edit/<int:employee_id>/', views.edit_employee, name='edit_employee'),  # Edit employee
     path('employees/delete/<int:employee_id>/', views.delete_employee, name='delete_employee'),  # Delete employee
     path('profile/', views.user_profile, name='user_profile'),
+    path('profile/hr', views.user_profile_hr, name='user_profile_hr'),
+    path('profile/sp', views.user_profile_sp, name='user_profile_sp'),
+    path('profile/hd', views.user_profile_hd, name='user_profile_hd'),
+
 ]
 
 

@@ -760,4 +760,121 @@ def user_profile(request):
     return render(request, 'user_profile.html', {
         'user_form': user_form,
         'password_form': password_form
+
+
+    })
+
+def user_profile_hr(request):
+    if request.method == 'POST':
+        # Handling user info update (username, email)
+        if 'update_user_info' in request.POST:
+            user_form = UserUpdateForm(request.POST, instance=request.user)
+            if user_form.is_valid():
+                user_form.save()
+                messages.success(request, 'Your account information has been updated.')
+                return redirect('user_profile_hr')
+        # Handling password change
+        elif 'change_password' in request.POST:
+            password_form = PasswordChangeForm(request.POST)
+            if password_form.is_valid():
+                old_password = password_form.cleaned_data['old_password']
+                new_password = password_form.cleaned_data['new_password']
+
+                if not request.user.check_password(old_password):
+                    password_form.add_error('old_password', 'Current password is incorrect.')
+                else:
+                    request.user.set_password(new_password)
+                    request.user.save()
+                    update_session_auth_hash(request, request.user)  # Prevent logging the user out
+                    messages.success(request, 'Your password has been updated successfully.')
+                    return redirect('user_profile_hr')
+            else:
+                password_form.add_error(None, 'There was an error with your password change request.')
+
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+        password_form = PasswordChangeForm()
+
+    return render(request, 'hr/user_profile.html', {
+        'user_form': user_form,
+        'password_form': password_form
+
+        
+    })
+
+
+def user_profile_sp(request):
+    if request.method == 'POST':
+        # Handling user info update (username, email)
+        if 'update_user_info' in request.POST:
+            user_form = UserUpdateForm(request.POST, instance=request.user)
+            if user_form.is_valid():
+                user_form.save()
+                messages.success(request, 'Your account information has been updated.')
+                return redirect('user_profile_sp')
+        # Handling password change
+        elif 'change_password' in request.POST:
+            password_form = PasswordChangeForm(request.POST)
+            if password_form.is_valid():
+                old_password = password_form.cleaned_data['old_password']
+                new_password = password_form.cleaned_data['new_password']
+
+                if not request.user.check_password(old_password):
+                    password_form.add_error('old_password', 'Current password is incorrect.')
+                else:
+                    request.user.set_password(new_password)
+                    request.user.save()
+                    update_session_auth_hash(request, request.user)  # Prevent logging the user out
+                    messages.success(request, 'Your password has been updated successfully.')
+                    return redirect('user_profile_sp')
+            else:
+                password_form.add_error(None, 'There was an error with your password change request.')
+
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+        password_form = PasswordChangeForm()
+
+    return render(request, 'sp/user_profile.html', {
+        'user_form': user_form,
+        'password_form': password_form
+
+        
+    })
+
+def user_profile_hd(request):
+    if request.method == 'POST':
+        # Handling user info update (username, email)
+        if 'update_user_info' in request.POST:
+            user_form = UserUpdateForm(request.POST, instance=request.user)
+            if user_form.is_valid():
+                user_form.save()
+                messages.success(request, 'Your account information has been updated.')
+                return redirect('user_profile_hd')
+        # Handling password change
+        elif 'change_password' in request.POST:
+            password_form = PasswordChangeForm(request.POST)
+            if password_form.is_valid():
+                old_password = password_form.cleaned_data['old_password']
+                new_password = password_form.cleaned_data['new_password']
+
+                if not request.user.check_password(old_password):
+                    password_form.add_error('old_password', 'Current password is incorrect.')
+                else:
+                    request.user.set_password(new_password)
+                    request.user.save()
+                    update_session_auth_hash(request, request.user)  # Prevent logging the user out
+                    messages.success(request, 'Your password has been updated successfully.')
+                    return redirect('user_profile_hd')
+            else:
+                password_form.add_error(None, 'There was an error with your password change request.')
+
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+        password_form = PasswordChangeForm()
+
+    return render(request, 'hd/user_profile.html', {
+        'user_form': user_form,
+        'password_form': password_form
+
+        
     })
