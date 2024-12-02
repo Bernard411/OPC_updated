@@ -56,15 +56,147 @@ def create_leave_request(request):
 
 
 
+# @login_required
+# def hr_approval(request, leave_request_id):
+#     leave_request = get_object_or_404(LeaveRequest, id=leave_request_id)
+
+#     # Check if the user has the HR role
+#     if request.user.employee.post and request.user.employee.post.role_name in ['HR']:  # Only HR can approve
+#         if request.method == 'POST':
+#             approval_status = request.POST.get('approval_status')
+#             comments = request.POST.get('comments', '')
+
+#             if approval_status == 'Rejected':
+#                 leave_request.status = 'Rejected'
+#                 leave_request.save()
+#                 messages.error(request, 'Leave request has been rejected.')
+#             else:
+#                 leave_request.status = 'HR Approved'
+#                 leave_request.save()
+
+#                 # Check if an HR approval exists, update it or create a new one
+#                 hr_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='HR').first()
+                
+#                 if hr_approval:
+#                     # If HR approval exists, update it
+#                     hr_approval.approval_status = 'Approved'
+#                     hr_approval.comments = comments
+#                     hr_approval.save()
+#                     messages.success(request, 'Leave request updated and forwarded to Supervisor.')
+#                 else:
+#                     LeaveApproval.objects.create(
+#                         leave_request=leave_request,
+#                         approver=request.user.employee,  # Assuming 'employee' is related to 'User'
+#                         approver_role=request.user.employee.post,
+#                         approval_status='Approved',
+#                         comments=comments
+#                     )
+#                     messages.success(request, 'Leave request approved and forwarded to Supervisor.')
+
+#             return redirect('hr_dashboard')
+
+#         return render(request, 'hr/hr_approval.html', {'leave_request': leave_request})
+
+#     else:
+#         messages.error(request, 'You are not authorized to approve leave requests.')
+#         return redirect('hr_dashboard')
+# @login_required
+# def supervisor_approval(request, leave_request_id):
+#     leave_request = get_object_or_404(LeaveRequest, id=leave_request_id)
+
+#     # Supervisor can approve only if HR has approved
+#     if leave_request.status == 'HR Approved' and request.user.employee.post and request.user.employee.post.role_name == 'Supervisor':
+#         # Get the HR and Supervisor approvals
+#         hr_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='HR').first()
+#         supervisor_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='Supervisor').first()
+
+#         if request.method == 'POST':
+#             approval_status = request.POST.get('approval_status')
+#             comments = request.POST.get('comments', '')
+
+#             if approval_status == 'Rejected':
+#                 leave_request.status = 'Rejected'
+#                 leave_request.save()
+#                 messages.error(request, 'Leave request has been rejected by Supervisor.')
+#             else:
+#                 leave_request.status = 'Supervisor Approved'
+#                 leave_request.save()
+
+#                 LeaveApproval.objects.create(
+#                     leave_request=leave_request,
+#                     approver=request.user.employee,  # Assuming 'employee' is related to 'User'
+#                     approver_role=request.user.employee.post,
+#                     approval_status='Approved',
+#                     comments=comments
+#                 )
+#                 messages.success(request, 'Leave request approved and forwarded to Head of Section.')
+
+#             return redirect('supervisor_dashboard')
+
+#         return render(request, 'sp/supervisor_approval.html', {
+#             'leave_request': leave_request,
+#             'hr_approval': hr_approval,
+#             'supervisor_approval': supervisor_approval
+#         })
+
+#     else:
+#         messages.error(request, 'You are not authorized to approve this leave request or it is not at the correct stage.')
+#         return redirect('supervisor_dashboard')
+# @login_required
+# def head_of_section_approval(request, leave_request_id):
+#     leave_request = get_object_or_404(LeaveRequest, id=leave_request_id)
+
+#     # Head of Section can approve the leave request only if Supervisor has approved it
+#     if leave_request.status == 'Supervisor Approved' and request.user.employee.post and request.user.employee.post.role_name == 'Head of Department':
+#         # Get the HR, Supervisor, and Head of Section approvals
+#         hr_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='HR').first()
+#         supervisor_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='Supervisor').first()
+#         head_of_section_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='Head of Department').first()
+
+#         if request.method == 'POST':
+#             approval_status = request.POST.get('approval_status')
+#             comments = request.POST.get('comments', '')
+
+#             if approval_status == 'Rejected':
+#                 leave_request.status = 'Rejected'
+#                 leave_request.save()
+#                 messages.error(request, 'Leave request has been rejected by Head of Section.')
+#             else:
+#                 leave_request.status = 'Head Approved'
+#                 leave_request.save()
+#                 LeaveApproval.objects.create(
+#                     leave_request=leave_request,
+#                     approver=request.user.employee,
+#                     approver_role=request.user.employee.post,
+#                     approval_status='Approved',
+#                     comments=comments
+#                 )
+#                 messages.success(request, 'Leave request approved successfully.')
+
+#             return redirect('head_of_section_dashboard')
+
+#         return render(request, 'hd/head_of_section_approval.html', {
+#             'leave_request': leave_request,
+#             'hr_approval': hr_approval,
+#             'supervisor_approval': supervisor_approval,
+#             'head_of_section_approval': head_of_section_approval,
+#         })
+
+#     else:
+#         messages.error(request, 'Leave request cannot be approved by you at this stage.')
+#         return redirect('head_of_section_dashboard')
+from django.utils.timezone import now
+
+
 @login_required
 def hr_approval(request, leave_request_id):
     leave_request = get_object_or_404(LeaveRequest, id=leave_request_id)
 
-    # Check if the user has the HR role
-    if request.user.employee.post and request.user.employee.post.role_name in ['HR']:  # Only HR can approve
+    if request.user.employee.post and request.user.employee.post.role_name == 'HR':
         if request.method == 'POST':
             approval_status = request.POST.get('approval_status')
             comments = request.POST.get('comments', '')
+            signature = request.FILES.get('signature')  # Handle signature upload
 
             if approval_status == 'Rejected':
                 leave_request.status = 'Rejected'
@@ -74,45 +206,36 @@ def hr_approval(request, leave_request_id):
                 leave_request.status = 'HR Approved'
                 leave_request.save()
 
-                # Check if an HR approval exists, update it or create a new one
-                hr_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='HR').first()
-                
-                if hr_approval:
-                    # If HR approval exists, update it
-                    hr_approval.approval_status = 'Approved'
-                    hr_approval.comments = comments
-                    hr_approval.save()
-                    messages.success(request, 'Leave request updated and forwarded to Supervisor.')
-                else:
-                    LeaveApproval.objects.create(
-                        leave_request=leave_request,
-                        approver=request.user.employee,  # Assuming 'employee' is related to 'User'
-                        approver_role=request.user.employee.post,
-                        approval_status='Approved',
-                        comments=comments
-                    )
-                    messages.success(request, 'Leave request approved and forwarded to Supervisor.')
+                # Update or create the HR approval entry
+                hr_approval, created = LeaveApproval.objects.update_or_create(
+                    leave_request=leave_request,
+                    approver_role=request.user.employee.post,
+                    defaults={
+                        'approver': request.user.employee,
+                        'approval_status': 'Approved',
+                        'comments': comments,
+                        'signature': signature,
+                        'action_date': now()
+                    }
+                )
+                messages.success(request, 'Leave request approved and forwarded to Supervisor.')
 
             return redirect('hr_dashboard')
 
         return render(request, 'hr/hr_approval.html', {'leave_request': leave_request})
 
-    else:
-        messages.error(request, 'You are not authorized to approve leave requests.')
-        return redirect('hr_dashboard')
+    messages.error(request, 'You are not authorized to approve leave requests.')
+    return redirect('hr_dashboard')
+
 @login_required
 def supervisor_approval(request, leave_request_id):
     leave_request = get_object_or_404(LeaveRequest, id=leave_request_id)
 
-    # Supervisor can approve only if HR has approved
-    if leave_request.status == 'HR Approved' and request.user.employee.post and request.user.employee.post.role_name == 'Supervisor':
-        # Get the HR and Supervisor approvals
-        hr_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='HR').first()
-        supervisor_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='Supervisor').first()
-
+    if leave_request.status == 'HR Approved' and request.user.employee.post.role_name == 'Supervisor':
         if request.method == 'POST':
             approval_status = request.POST.get('approval_status')
             comments = request.POST.get('comments', '')
+            signature = request.FILES.get('signature')  # Handle signature upload
 
             if approval_status == 'Rejected':
                 leave_request.status = 'Rejected'
@@ -122,40 +245,36 @@ def supervisor_approval(request, leave_request_id):
                 leave_request.status = 'Supervisor Approved'
                 leave_request.save()
 
-                LeaveApproval.objects.create(
+                LeaveApproval.objects.update_or_create(
                     leave_request=leave_request,
-                    approver=request.user.employee,  # Assuming 'employee' is related to 'User'
                     approver_role=request.user.employee.post,
-                    approval_status='Approved',
-                    comments=comments
+                    defaults={
+                        'approver': request.user.employee,
+                        'approval_status': 'Approved',
+                        'comments': comments,
+                        'signature': signature,
+                        'action_date': now()
+                    }
                 )
                 messages.success(request, 'Leave request approved and forwarded to Head of Section.')
 
             return redirect('supervisor_dashboard')
 
-        return render(request, 'sp/supervisor_approval.html', {
-            'leave_request': leave_request,
-            'hr_approval': hr_approval,
-            'supervisor_approval': supervisor_approval
-        })
+        return render(request, 'sp/supervisor_approval.html', {'leave_request': leave_request})
 
-    else:
-        messages.error(request, 'You are not authorized to approve this leave request or it is not at the correct stage.')
-        return redirect('supervisor_dashboard')
+    messages.error(request, 'You are not authorized to approve this leave request or it is not at the correct stage.')
+    return redirect('supervisor_dashboard')
+
 @login_required
 def head_of_section_approval(request, leave_request_id):
     leave_request = get_object_or_404(LeaveRequest, id=leave_request_id)
 
-    # Head of Section can approve the leave request only if Supervisor has approved it
+    # Head of Section can approve only if Supervisor has approved
     if leave_request.status == 'Supervisor Approved' and request.user.employee.post and request.user.employee.post.role_name == 'Head of Department':
-        # Get the HR, Supervisor, and Head of Section approvals
-        hr_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='HR').first()
-        supervisor_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='Supervisor').first()
-        head_of_section_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='Head of Department').first()
-
         if request.method == 'POST':
             approval_status = request.POST.get('approval_status')
             comments = request.POST.get('comments', '')
+            signature = request.FILES.get('signature')  # Handle signature upload
 
             if approval_status == 'Rejected':
                 leave_request.status = 'Rejected'
@@ -164,16 +283,27 @@ def head_of_section_approval(request, leave_request_id):
             else:
                 leave_request.status = 'Head Approved'
                 leave_request.save()
-                LeaveApproval.objects.create(
+
+                # Update or create Head of Section approval entry
+                LeaveApproval.objects.update_or_create(
                     leave_request=leave_request,
-                    approver=request.user.employee,
                     approver_role=request.user.employee.post,
-                    approval_status='Approved',
-                    comments=comments
+                    defaults={
+                        'approver': request.user.employee,
+                        'approval_status': 'Approved',
+                        'comments': comments,
+                        'signature': signature,
+                        'action_date': now()
+                    }
                 )
-                messages.success(request, 'Leave request approved successfully.')
+                messages.success(request, 'Leave request has been approved successfully.')
 
             return redirect('head_of_section_dashboard')
+
+        # Retrieve approval details for display (optional)
+        hr_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='HR').first()
+        supervisor_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='Supervisor').first()
+        head_of_section_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='Head of Department').first()
 
         return render(request, 'hd/head_of_section_approval.html', {
             'leave_request': leave_request,
@@ -182,9 +312,8 @@ def head_of_section_approval(request, leave_request_id):
             'head_of_section_approval': head_of_section_approval,
         })
 
-    else:
-        messages.error(request, 'Leave request cannot be approved by you at this stage.')
-        return redirect('head_of_section_dashboard')
+    messages.error(request, 'Leave request cannot be approved by you at this stage.')
+    return redirect('head_of_section_dashboard')
 
 
 from django.shortcuts import render
@@ -579,20 +708,25 @@ from xhtml2pdf import pisa  # Use any library for PDF generation
 
 @login_required
 def generate_leave_form_view(request, leave_id):
-    leave_request = LeaveRequest.objects.get(id=leave_id)
+    try:
+        leave_request = LeaveRequest.objects.get(id=leave_id)
+    except LeaveRequest.DoesNotExist:
+        return HttpResponse("Leave request not found.", status=404)
 
     # Fetch details for the leave form
     context = {
         'name': leave_request.employee.name,
-        'grade': leave_request.employee.grade,
-        'post': leave_request.employee.post,
+        'grade': leave_request.employee.get_grade_display(),
+        'post': leave_request.employee.post.role_name if leave_request.employee.post else "Not Assigned",
         'employment_no': leave_request.employee.employment_no,
         'bank_name': leave_request.employee.bank_name,
         'account_no': leave_request.employee.bank_account_no,
         'start_date': leave_request.start_date,
         'end_date': leave_request.end_date,
-        'contact_address': leave_request.contact_address_during_leave,  # Correct field
-        'days_remaining': leave_request.days_remaining(),  # Use the method here
+        'contact_address': leave_request.contact_address_during_leave or "Not Provided",
+        'days_remaining': leave_request.days_remaining(),
+        'leave_grant': leave_request.leave_grant_requested or "Not Requested",
+        'application_date': leave_request.submission_date.strftime("%Y-%m-%d"),
         'hr_approval': leave_request.leaveapproval_set.filter(approver_role__role_name='HR').first(),
         'supervisor_approval': leave_request.leaveapproval_set.filter(approver_role__role_name='Supervisor').first(),
         'head_approval': leave_request.leaveapproval_set.filter(approver_role__role_name='Head of Section').first(),
@@ -611,6 +745,7 @@ def generate_leave_form_view(request, leave_id):
         return HttpResponse("Error generating PDF", status=500)
 
     return response
+
 
 
 from django.shortcuts import redirect
