@@ -1,3 +1,5 @@
+
+
 {% load static %}
 
 {% include 'head.html' %}
@@ -12,9 +14,9 @@
         <div class="ms-3">
           <h3 class="mb-0 h4 font-weight-bolder" style="font-weight: bold; font-family:Poppins;">
            
-            Office of President and Cabinet</h3>
+           {{user.email}}</h3>
           <p class="mb-4" style="font-weight: bold; font-family:Poppins;">
-           leave application system
+        (  <b>@</b>{{user.username}} )
           </p>
         </div>
   
@@ -112,31 +114,29 @@
                     }
                 </style>
             
-                <h3 class="mb-0 h4 font-weight-bolder" style="font-weight: bold; font-family:Poppins;">
-                    <img src="{% static 'mw.png' %}" class="navbar-brand-img" width="26" height="26" alt="main_logo">
-                    Opc Leave Application</h3>
-                <form action="{% url 'submit_leave_request' %}" method="POST" class="leave-form">
-                    {% csrf_token %}
-                    
-                    <label for="start_date">Start Date:</label>
-                    <input type="date" id="start_date" name="start_date" required><br><br>
-                
-                    <label for="end_date">End Date:</label>
-                    <input type="date" id="end_date" name="end_date" required><br><br>
-                
-                    <label for="number_of_days">Number of Days:</label>
-                    <input type="number" id="number_of_days" name="number_of_days" required><br><br>
-                
-                    <label for="contact_address">Contact Address During Leave:</label>
-                    <textarea id="contact_address" name="contact_address_during_leave" rows="4" cols="50"></textarea><br><br>
-                
-                    <label for="leave_grant">Leave Grant Requested:</label>
-                    <input type="text" id="leave_grant" name="leave_grant_requested"><br><br>
-                
-               
-                        <button type="submit" class="btn btn-success btn-sm">Request Leave</button>
-       
-                </form>
+              
+                   
+                  
+
+                    <!-- Update User Info Form -->
+                    <h3 style="font-family: Poppins; font-weight: bold;">Update Account Information</h3>
+                    <form method="POST">
+                      {% csrf_token %}
+                      {{ user_form.as_p }}
+                      <button type="submit" name="update_user_info" class="btn btn-primary">Update Info</button>
+                    </form>
+                  
+                    <hr>
+                  
+                    <!-- Change Password Form -->
+                    <h3 style="font-family: Poppins; font-weight: bold;">Change Your Password</h3>
+                    <form method="POST">
+                      {% csrf_token %}
+                      {{ password_form.as_p }}
+                      <button type="submit" name="change_password" class="btn btn-danger">Change Password</button>
+                    </form>
+                  
+                    <hr>
                 
                 </div>
             </body>
@@ -219,4 +219,5 @@
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="{% static 'assets/js/material-dashboard.min.js' %}"></script>
 </body>
+
 

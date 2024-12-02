@@ -4,18 +4,19 @@ from .models import LeaveRequest, Employee
 from django.contrib.auth.decorators import login_required
 
 @login_required
-
 def create_leave_request(request):
     if request.method == 'POST':
+        # Get the data from the form
         start_date = request.POST.get('start_date')
         end_date = request.POST.get('end_date')
         number_of_days = int(request.POST.get('number_of_days'))
         contact_address = request.POST.get('contact_address_during_leave', '')  # Default to empty string if not provided
         leave_grant_requested = request.POST.get('leave_grant_requested', '')
+        
+        # Get the employee object associated with the logged-in user
+        employee = request.user.employee  # Assuming the logged-in user has an associated Employee object
 
-        employee = request.user.employee  # Assuming the logged-in user has an associated Employee
-
-        # Create the leave request
+        # Create the leave request object and associate the user
         leave_request = LeaveRequest(
             employee=employee,
             start_date=start_date,
@@ -23,13 +24,16 @@ def create_leave_request(request):
             number_of_days=number_of_days,
             contact_address_during_leave=contact_address,
             leave_grant_requested=leave_grant_requested,
+            user=request.user  # Set the logged-in user to the 'user' field
         )
         leave_request.save()
 
+        # Show a success message
         messages.success(request, 'Your leave request has been submitted and is pending approval.')
         return redirect('homepage')
     
-    leave_requests = LeaveRequest.objects.all()
+    # Fetch all leave requests to display
+    leave_requests = LeaveRequest.objects.filter(user=request.user)  # Only show the logged-in user's leave requests
 
     leave_requests_data = []
     for leave in leave_requests:
@@ -49,6 +53,7 @@ def create_leave_request(request):
         })
 
     return render(request, 'request_leave.html', {'leave_requests': leave_requests_data})
+
 
 
 @login_required
@@ -192,8 +197,14 @@ def leave_request_list(request):
 
     return render(request, 'leave_request_list.html', {'leave_requests': leave_requests})
 
+from django.core.paginator import Paginator
+from django.shortcuts import render
+from .models import LeaveRequest
+
 def home(request):
-    leave_requests = LeaveRequest.objects.all()
+    # Filter leave requests by the currently logged-in user
+    leave_requests = LeaveRequest.objects.filter(user=request.user)
+
     leave_requests_data = []
     for leave in leave_requests:
         # Check if the approval exists for 'Head of Department'
@@ -210,8 +221,14 @@ def home(request):
             'status': "Approved by Head" if head_approved else "Pending",
             'download_enabled': head_approved,  # Enable only if Head approved
         })
+    
+    # Paginate the leave requests data
+    paginator = Paginator(leave_requests_data, 10)  # Show 10 leave requests per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'home.html', {'page_obj': page_obj})
 
-    return render(request, 'home.html', {'leave_requests': leave_requests_data})
 
 
 from django.shortcuts import render
@@ -384,7 +401,11 @@ def supervisor_dashboard(request):
 def head_of_section_dashboard(request):
     if request.user.employee.post and request.user.employee.post.role_name == 'Head of Department':  # Check if the user is Head of Department
         leave_requests = LeaveRequest.objects.filter(status='Supervisor Approved')  # Only show Supervisor-approved requests
-        return render(request, 'hd/head_of_section_dashboard.html', {'leave_requests': leave_requests})
+        paginator = Paginator(leave_requests, 10)  # Show 10 leave requests per page
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        
+        return render(request, 'hd/head_of_section_dashboard.html', {'page_obj': page_obj})
     else:
         return redirect('home')  # Redirect to home if not Head of Department
 
@@ -426,7 +447,7 @@ def register(request):
             messages.success(request, 'Registration successful! You are now logged in.')
 
             # Redirect to the home page or user dashboard
-            return redirect('home')  # Replace with a specific dashboard URL if needed
+            return redirect('hr_dashboard')  # Replace with a specific dashboard URL if needed
         else:
             messages.error(request, 'There was an error in the form. Please check your input.')
     else:
@@ -695,3 +716,48 @@ def edit_employee(request, employee_id):
         return redirect('employee_list')
 
     return render(request, 'hr/edit_employee.html', {'employee': employee})
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from .forms import UserUpdateForm, PasswordChangeForm
+
+@login_required
+def user_profile(request):
+    if request.method == 'POST':
+        # Handling user info update (username, email)
+        if 'update_user_info' in request.POST:
+            user_form = UserUpdateForm(request.POST, instance=request.user)
+            if user_form.is_valid():
+                user_form.save()
+                messages.success(request, 'Your account information has been updated.')
+                return redirect('user_profile')
+        # Handling password change
+        elif 'change_password' in request.POST:
+            password_form = PasswordChangeForm(request.POST)
+            if password_form.is_valid():
+                old_password = password_form.cleaned_data['old_password']
+                new_password = password_form.cleaned_data['new_password']
+
+                if not request.user.check_password(old_password):
+                    password_form.add_error('old_password', 'Current password is incorrect.')
+                else:
+                    request.user.set_password(new_password)
+                    request.user.save()
+                    update_session_auth_hash(request, request.user)  # Prevent logging the user out
+                    messages.success(request, 'Your password has been updated successfully.')
+                    return redirect('user_profile')
+            else:
+                password_form.add_error(None, 'There was an error with your password change request.')
+
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+        password_form = PasswordChangeForm()
+
+    return render(request, 'user_profile.html', {
+        'user_form': user_form,
+        'password_form': password_form
+    })

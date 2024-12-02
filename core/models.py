@@ -73,6 +73,7 @@ class LeaveRequest(models.Model):
     leave_grant_requested = models.CharField(max_length=255, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
     submission_date = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # You can keep this if you still need it
 
     def __str__(self):
         return f"LeaveRequest ({self.employee.name}, {self.status})"

@@ -5,12 +5,7 @@
   {% include 'side4.html' %}
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
     <!-- Navbar -->
-    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
-      <div class="container-fluid py-1 px-3">
- 
-        </div>
-      </div>
-    </nav>
+    {% include 'nav.html' %}
     <!-- End Navbar -->
     <div class="container-fluid py-2">
       <div class="row">
@@ -50,8 +45,11 @@
 
        
     </style>
+<span style="font-weight: bold;">
+    <i class="fa fa-filter" aria-hidden="true"></i> Filter Data
+</span>
 
-    <input type="text" style="width: 100%" id="filterInput" onkeyup="filterTable()" placeholder="Search by employee name..." />
+<input type="text" style="width: 100%" id="tableFilter" placeholder="Search by employee name..." /> 
     <div class="card my-4 mt-5">
           
       <div class="card-body" style="background-color: #e1e2e2;">
@@ -120,71 +118,155 @@
                   }
               </style>
           </head>
+<!-- Filter Input -->
+
+<!-- Table --><!-- Filter Input -->
 
 
-          <table border="1">
-              <thead>
-                  <tr>
-                      <th>Employee Name</th>
-                      <th>Start Date</th>
-                      <th>End Date</th>
-                      <th>Status</th>
-                      <th>HR Approved</th>
-                      <th>Supervisor Approved</th>
-                      <th>Head Approved</th>
-                      <th>Actions</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  {% for request in leave_requests %}
-                      <tr>
-                          <td>{{ request.employee.name }}</td>
-                          <td>{{ request.start_date }}</td>
-                          <td>{{ request.end_date }}</td>
-                          <td>{{ request.status }}</td>
-                          <td>{% if request.status == 'HR Approved' %} Approved {% else %} Pending {% endif %}</td>
-                          <td>{% if request.status == 'Supervisor Approved' %} Approved {% else %} Pending {% endif %}</td>
-                          <td>
-                              {% if request.head_approval %}
-                                  {{ request.head_approval.approval_status }}
-                              {% else %}
-                                  Pending
-                              {% endif %}
-                          </td>
-          
-                          <td>
-                              {% if request.status == 'Supervisor Approved' %}
-                                  <a href="{% url 'head_of_section_approval' request.id %}" class="btn btn-success w-100">Approve / Reject</a>
-                              {% endif %}
-                          </td>
-                      </tr>
-                  {% endfor %}
-              </tbody>
-          </table>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-sm">
+        <thead>
+            <tr>
+                <th>Employee Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+                <th>HR Approved</th>
+                <th>Supervisor Approved</th>
+                <th>Head Approved</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="leaveTableBody">
+            {% for request in page_obj %}
+            <tr>
+                <td>{{ request.employee.name }}</td>
+                <td>{{ request.start_date }}</td>
+                <td>{{ request.end_date }}</td>
+                <td>
+                    <span class="badge 
+                        {% if request.status == 'HR Approved' %} bg-success 
+                        {% else %} bg-warning text-dark {% endif %}">
+                        {{ request.status }}
+                    </span>
+                </td>
+                <td>
+                    {% if request.status == 'HR Approved' %}
+                    <span class="badge bg-success">Approved</span>
+                    {% else %}
+                    <span class="badge bg-warning text-dark">Pending</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if request.status == 'Supervisor Approved' %}
+                    <span class="badge bg-success">Approved</span>
+                    {% else %}
+                    <span class="badge bg-warning text-dark">Pending</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if request.head_approval %}
+                    <span class="badge 
+                        {% if request.head_approval.approval_status == 'Approved' %} bg-success 
+                        {% else %} bg-danger {% endif %}">
+                        {{ request.head_approval.approval_status }}
+                    </span>
+                    {% else %}
+                    <span class="badge bg-warning text-dark">Pending</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if request.status == 'Supervisor Approved' %}
+                    <a href="{% url 'head_of_section_approval' request.id %}" class="btn btn-sm btn-success">
+                        <i class="fas fa-check-circle"></i> Approve / Reject
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.getElementById('tableFilter').addEventListener('input', function () {
+        const filter = this.value.toLowerCase();
+        const rows = document.querySelectorAll('#leaveTableBody tr');
+
+        rows.forEach(row => {
+            const employeeNameCell = row.querySelector('td:first-child');  // Targeting the Employee Name cell
+            if (employeeNameCell) {
+                const employeeName = employeeNameCell.textContent.toLowerCase();
+                // Show or hide row based on the filter
+                row.style.display = employeeName.includes(filter) ? '' : 'none';
+            }
+        });
+    });
+</script>
+
+
+        
+            <!-- Pagination Controls -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">&laquo;</span>
+                    </li>
+                    {% endif %}
+            
+                    {% for num in page_obj.paginator.page_range %}
+                    <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endfor %}
+            
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">&raquo;</span>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+
+<!-- Pagination -->
+
+
+        <style>
+            /* Change active pagination color to blue */
+            .pagination .page-item.active .page-link {
+                background-color: #007bff !important; /* Bootstrap primary blue */
+                border-color: #007bff !important;
+                color: white !important;
+            }
+        
+            /* Custom hover effect for pagination links */
+            .pagination .page-link:hover {
+                background-color: #0056b3; /* Darker blue for hover */
+                color: white;
+            }
+        
+            /* Custom focus style */
+            .pagination .page-link:focus {
+                box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            }
+        </style>
+        
+        
               </div>
           
-              <script>
-                  // JavaScript function to filter the table rows based on the input value
-                  function filterTable() {
-                      let input, filter, table, tr, td, i, txtValue;
-                      input = document.getElementById("filterInput");
-                      filter = input.value.toUpperCase();
-                      table = document.getElementById("leaveTable");
-                      tr = table.getElementsByTagName("tr");
-          
-                      for (i = 1; i < tr.length; i++) {
-                          td = tr[i].getElementsByTagName("td")[0]; // Search only in the first column (Employee Name)
-                          if (td) {
-                              txtValue = td.textContent || td.innerText;
-                              if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                                  tr[i].style.display = "";
-                              } else {
-                                  tr[i].style.display = "none";
-                              }
-                          }
-                      }
-                  }
-              </script>
           </body>
           
           </html>

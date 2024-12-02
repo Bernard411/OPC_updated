@@ -35,3 +35,26 @@ class EmailAuthenticationForm(AuthenticationForm):
             return email
         except User.DoesNotExist:
             raise forms.ValidationError("This email is not registered.")
+
+
+from django import forms
+from django.contrib.auth.models import User
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email']  # Fields to update (username and email)
+
+class PasswordChangeForm(forms.Form):
+    old_password = forms.CharField(widget=forms.PasswordInput, label="Current Password")
+    new_password = forms.CharField(widget=forms.PasswordInput, label="New Password")
+    confirm_password = forms.CharField(widget=forms.PasswordInput, label="Confirm New Password")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password = cleaned_data.get("new_password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if new_password != confirm_password:
+            raise forms.ValidationError("New passwords do not match.")
+        return cleaned_data
