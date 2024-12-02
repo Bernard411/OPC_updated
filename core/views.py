@@ -488,55 +488,46 @@ from .models import LeaveRequest, LeaveApproval
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import LeaveRequest
-
-@login_required
-def hr_dashboard(request):
-    if request.user.employee.post and request.user.employee.post.role_name == 'HR':  # Check if the user is HR
-        leave_requests = LeaveRequest.objects.all()  # Or filter as needed
-
-        # Pre-fetching approvals related to the leave requests to optimize database hits
-        for leave_request in leave_requests:
-            leave_request.hr_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='HR').first()
-            leave_request.supervisor_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='Supervisor').first()
-            leave_request.head_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='Head of Department').first()
-        
-        paginator = Paginator(leave_requests, 10)  # Show 10 leave requests per page
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        
-
-        return render(request, 'hr/hr_dashboard.html', {'leave_requests': leave_requests, "page_obj":page_obj})
-    else:
-        return redirect('home')  # Redirect to home if not HR
-
 from django.core.paginator import Paginator
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .models import LeaveRequest
 
 @login_required
+def hr_dashboard(request):
+    leave_requests = LeaveRequest.objects.all()  # Or filter as needed
+
+    # Pre-fetching approvals related to the leave requests to optimize database hits
+    for leave_request in leave_requests:
+        leave_request.hr_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='HR').first()
+        leave_request.supervisor_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='Supervisor').first()
+        leave_request.head_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='Head of Department').first()
+    
+    paginator = Paginator(leave_requests, 10)  # Show 10 leave requests per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'hr/hr_dashboard.html', {'leave_requests': leave_requests, "page_obj": page_obj})
+
+
+@login_required
 def supervisor_dashboard(request):
-    if request.user.employee.post and request.user.employee.post.role_name == 'Supervisor':  # Check if the user is Supervisor
-        leave_requests = LeaveRequest.objects.filter(status='HR Approved')  # Only show HR-approved requests
-        paginator = Paginator(leave_requests, 10)  # Show 10 leave requests per page
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        return render(request, 'sp/supervisor_dashboard.html', {'page_obj': page_obj})
-    else:
-        return redirect('home')  # Redirect to home if not Supervisor
+    leave_requests = LeaveRequest.objects.filter(status='HR Approved')  # Only show HR-approved requests
+    paginator = Paginator(leave_requests, 10)  # Show 10 leave requests per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'sp/supervisor_dashboard.html', {'page_obj': page_obj})
 
 
 @login_required
 def head_of_section_dashboard(request):
-    if request.user.employee.post and request.user.employee.post.role_name == 'Head of Department':  # Check if the user is Head of Department
-        leave_requests = LeaveRequest.objects.filter(status='Supervisor Approved')  # Only show Supervisor-approved requests
-        paginator = Paginator(leave_requests, 10)  # Show 10 leave requests per page
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        
-        return render(request, 'hd/head_of_section_dashboard.html', {'page_obj': page_obj})
-    else:
-        return redirect('home')  # Redirect to home if not Head of Department
+    leave_requests = LeaveRequest.objects.filter(status='Supervisor Approved')  # Only show Supervisor-approved requests
+    paginator = Paginator(leave_requests, 10)  # Show 10 leave requests per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'hd/head_of_section_dashboard.html', {'page_obj': page_obj})
 
 
 from django.shortcuts import render, redirect

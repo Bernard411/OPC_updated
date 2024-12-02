@@ -158,7 +158,7 @@
             <!-- Approval Form -->
             <div class="card p-3 shadow-sm">
                 <h5>Approval Form</h5>
-                <form method="POST">
+                <!-- <form method="POST">
                     {% csrf_token %}
                     
                     <div class="mb-3">
@@ -177,6 +177,22 @@
                     <label for="signature">Upload Signature:</label>
                     <input type="file" name="signature" id="signature" accept="image/*">
                     
+                    <button type="submit" class="btn btn-primary w-100">Submit</button>
+                </form> -->
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <label for="approval_status">Approval Status:</label>
+                    <select  class="form-control bg-gray-100" name="approval_status" id="approval_status">
+                        <option value="Approved">Approve</option>
+                        <option value="Rejected">Reject</option>
+                    </select>
+                
+                    <label for="comments">Comments:</label>
+                    <textarea  class="form-control bg-gray-100" name="comments" id="comments"></textarea>
+                
+                    <label for="signature">Upload Signature:</label>
+                    <input type="file" name="signature" id="signature" accept="image/*">
+                
                     <button type="submit" class="btn btn-primary w-100">Submit</button>
                 </form>
             </div>
