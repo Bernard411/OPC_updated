@@ -1,5 +1,3 @@
-{% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,20 +22,20 @@
 
         .section-title {
             font-size: 18px;
-            font-weight: bold;
-            border-bottom: 1px solid #000;
+          
+            border-bottom: 1px solid grey;
             margin-bottom: 10px;
         }
 
         .row {
             display: flex;
-            margin-bottom: 15px;  /* Increased margin between rows */
+            margin-bottom: 15px;
         }
 
         .row div {
             width: 33%;
             display: inline-block;
-            padding: 10px;  /* Increased padding to create space between details */
+            padding: 10px;
             box-sizing: border-box;
         }
 
@@ -56,17 +54,37 @@
             text-align: center;
         }
 
+        .signature img {
+            width: 150px; /* Set consistent image width */
+            height: 50px; /* Set consistent image height */
+            object-fit: contain; /* Prevent distortion */
+            margin: 10px auto;
+        }
+
         .footer {
             text-align: center;
             margin-top: 60px;
             font-size: 14px;
             color: #555;
         }
+
+        .signature-placeholder {
+            height: 50px;
+            line-height: 50px;
+           
+            margin: 10px auto;
+            width: 150px;
+            text-align: center;
+            color: #888;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-       <center><img src="https://opcmw.pythonanywhere.com/static/mw.png" alt="Logo" style="width: 70px;"></center>
+        <center>
+            <img src="https://opcmw.pythonanywhere.com/static/mw.png" alt="Logo" style="width: 70px;">
+        </center>
 
         <h1>Office of the President and Cabinet</h1>
 
@@ -102,43 +120,75 @@
         <div class="section">
             <div class="section-title">Leave Grant</div>
             <p>I apply for a leave grant of: {{ leave_grant|default:"Not Provided" }}</p>
-            <p style="display: flex; justify-content: space-between; align-items: center;">Date: {{ application_date|default:"Not Provided" }}    Signed: {{ employee_signature|default:"Not Provided" }}</p>
+            <p>Date: {{ application_date|default:"Not Provided" }} &emsp; Signed: {{ employee_signature|default:"Not Provided" }}</p>
         </div>
 
-        <!-- HR Section -->
+
+
+        <!-- Signatures Section -->
         <div class="section">
-            <div class="section-title">PART B: Human Resource Section</div>
-            <p>Previously taken: {{ hr_previous|default:"Not Provided" }} days, Remaining: {{ hr_remaining|default:"Not Provided" }} days</p>
-            <p>Date: {{ hr_date|default:"Not Provided" }}    Signed: {{ hr_signature|default:"Not Provided" }}</p>
-        </div>
+            <div class="section-title text-center" >Approvals</div>
 
-        <!-- Supervisor Section -->
-        <div class="section">
-            <div class="section-title">PART C: Supervisor of the Officer</div>
-            <p>I recommend/do not recommend the grant of leave from {{ start_date|default:"Not Provided" }} to {{ end_date|default:"Not Provided" }}.</p>
-            <p>Signature of Supervising Officer: {{ supervisor_signature|default:"Not Provided" }}    Date: {{ supervisor_date|default:"Not Provided" }}</p>
-        </div>
+         
+            <div class="section">
+                <div class="section-title" >PART B: Human Resource Section</div>
+                <p>I recommend/do not recommend the grant of leave from {{ start_date|default:"Not Provided" }} to {{ end_date|default:"Not Provided" }}.</p>
+                <p>Approved/Not Approved: {{ head_approval|default:"Not Provided" }}</p>
+            
 
-        <!-- Head of Section -->
-        <div class="section">
-            <div class="section-title">PART D: Head of Section</div>
-            <p>Approved/Not Approved: {{ head_approval|default:"Not Provided" }}</p>
-            <p>Signature of Head of Section: {{ head_signature|default:"Not Provided" }}    Date: {{ head_date|default:"Not Provided" }}</p>
-        </div>
-
-        <!-- Signature Section -->
-        <div class="signature">
-            <div>
-                <p>HR Signature</p>
-                <p>______________________</p>
+            <div class="signature">
+                <div>
+                    <p>HR Signature</p>
+                    {% if hr_signature != "Not Provided" %}
+                        <img src="{{ hr_signature }}" alt="HR Signature">
+                    {% else %}
+                        <div class="signature-placeholder">Not Provided</div>
+                    {% endif %}
+                    <p>Date: {{ hr_date|default:"Not Provided" }}</p>
+                </div>
+                
             </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title text-center" >PART C: Supervisor of the Officer</div>
+            <p>I recommend/do not recommend the grant of leave from {{ start_date|default:"Not Provided" }} to {{ end_date|default:"Not Provided" }}.</p>
+            <p>Approved/Not Approved: {{ head_approval|default:"Not Provided" }}</p>
+        
+
+        <div class="signature">
+           
             <div>
                 <p>Supervisor Signature</p>
-                <p>______________________</p>
+                {% if supervisor_signature != "Not Provided" %}
+                    <img src="{{ supervisor_signature }}" alt="Supervisor Signature">
+                {% else %}
+                    <div class="signature-placeholder">Not Provided</div>
+                {% endif %}
+                <p>Date: {{ supervisor_date|default:"Not Provided" }}</p>
             </div>
-            <div>
-                <p>Head of Section Signature</p>
-                <p>______________________</p>
+          
+        </div>
+    </div>
+    
+            <!-- Head of Section -->
+            <div class="section">
+                <div class="section-title text-center" >PART D: Head of Section</div>
+                <p>I recommend/do not recommend the grant of leave from {{ start_date|default:"Not Provided" }} to {{ end_date|default:"Not Provided" }}.</p>
+                <p>Approved/Not Approved: {{ head_approval|default:"Not Provided" }}</p>
+            
+
+            <div class="signature">
+              
+                <div>
+                    <p>Head of Section Signature</p>
+                    {% if head_signature != "Not Provided" %}
+                        <img src="{{ head_signature }}" alt="Head Signature">
+                    {% else %}
+                        <div class="signature-placeholder">Not Provided</div>
+                    {% endif %}
+                    <p>Date: {{ head_date|default:"Not Provided" }}</p>
+                </div>
             </div>
         </div>
 

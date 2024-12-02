@@ -100,7 +100,7 @@ class LeaveApproval(models.Model):
     comments = models.TextField(blank=True)
     action_date = models.DateTimeField(auto_now=True)
     signature = models.ImageField(upload_to='signatures/', blank=True, null=True)  # Optional: Image signature
-    is_signed = models.BooleanField(default=False)  # Tracks if the form is signed
+  
 
 
     def __str__(self):

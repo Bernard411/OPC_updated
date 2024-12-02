@@ -706,14 +706,38 @@ from xhtml2pdf import pisa  # Use any library for PDF generation
 
 #     return response
 
-@login_required
-def generate_leave_form_view(request, leave_id):
-    try:
-        leave_request = LeaveRequest.objects.get(id=leave_id)
-    except LeaveRequest.DoesNotExist:
-        return HttpResponse("Leave request not found.", status=404)
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
+from xhtml2pdf import pisa
+from django.template.loader import get_template
 
-    # Fetch details for the leave form
+import base64
+from django.utils.html import escape
+
+def generate_leave_form_view(request, leave_id):
+    leave_request = get_object_or_404(LeaveRequest, id=leave_id)
+
+    # Fetch approvals
+    hr_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='HR').first()
+    supervisor_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='Supervisor').first()
+    head_approval = leave_request.leaveapproval_set.filter(approver_role__role_name='Head of Department').first()
+
+    # Helper function to convert an image to Base64
+    def image_to_base64(image_field):
+        if image_field:
+            try:
+                with open(image_field.path, "rb") as img_file:
+                    return f"data:image/jpeg;base64,{base64.b64encode(img_file.read()).decode()}"
+            except Exception:
+                return None
+        return None
+
+    # Convert signatures to Base64
+    hr_signature_base64 = image_to_base64(hr_approval.signature) if hr_approval and hr_approval.signature else None
+    supervisor_signature_base64 = image_to_base64(supervisor_approval.signature) if supervisor_approval and supervisor_approval.signature else None
+    head_signature_base64 = image_to_base64(head_approval.signature) if head_approval and head_approval.signature else None
+
+    # Prepare context for rendering the PDF
     context = {
         'name': leave_request.employee.name,
         'grade': leave_request.employee.get_grade_display(),
@@ -727,12 +751,15 @@ def generate_leave_form_view(request, leave_id):
         'days_remaining': leave_request.days_remaining(),
         'leave_grant': leave_request.leave_grant_requested or "Not Requested",
         'application_date': leave_request.submission_date.strftime("%Y-%m-%d"),
-        'hr_approval': leave_request.leaveapproval_set.filter(approver_role__role_name='HR').first(),
-        'supervisor_approval': leave_request.leaveapproval_set.filter(approver_role__role_name='Supervisor').first(),
-        'head_approval': leave_request.leaveapproval_set.filter(approver_role__role_name='Head of Section').first(),
+        'hr_signature': hr_signature_base64 or "Not Provided",
+        'hr_date': hr_approval.action_date.strftime("%Y-%m-%d") if hr_approval else "Not Provided",
+        'supervisor_signature': supervisor_signature_base64 or "Not Provided",
+        'supervisor_date': supervisor_approval.action_date.strftime("%Y-%m-%d") if supervisor_approval else "Not Provided",
+        'head_signature': head_signature_base64 or "Not Provided",
+        'head_date': head_approval.action_date.strftime("%Y-%m-%d") if head_approval else "Not Provided",
     }
 
-    # Render the template to HTML
+    # Render template into HTML
     template = get_template('leave_form_pdf.html')
     html = template.render(context)
 
@@ -745,6 +772,7 @@ def generate_leave_form_view(request, leave_id):
         return HttpResponse("Error generating PDF", status=500)
 
     return response
+
 
 
 
