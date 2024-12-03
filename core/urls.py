@@ -41,6 +41,10 @@ urlpatterns = [
     path("export-leave-approvals/", views.export_leave_approvals_to_excel, name="export_leave_approvals"),
     path("export-employees/", views.export_employees_to_excel, name="export_employees"),
     path("upload-employees/", views.upload_employees_excel, name="upload_employees_excel"),
+   
+    path('check_field_availability/', views.check_field_availability, name='check_field_availability'),
+
+    
 
 ]
 if settings.DEBUG:

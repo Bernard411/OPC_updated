@@ -100,6 +100,39 @@
     </div>
 </form>
 
+<script>
+    function checkFieldAvailability(field, value) {
+        fetch(`/check_field_availability/?field=${field}&value=${value}`)
+            .then(response => response.json())
+            .then(data => {
+                let fieldElement = document.getElementById(field);
+                if (data.exists) {
+                    fieldElement.style.borderColor = 'red';
+                    fieldElement.setCustomValidity(`${field.charAt(0).toUpperCase() + field.slice(1)} already exists.`);
+                } else {
+                    fieldElement.style.borderColor = '';
+                    fieldElement.setCustomValidity('');
+                }
+            });
+    }
+
+    document.getElementById('id_username').addEventListener('blur', function() {
+        checkFieldAvailability('username', this.value);
+    });
+
+    document.getElementById('id_email').addEventListener('blur', function() {
+        checkFieldAvailability('email', this.value);
+    });
+
+    document.getElementById('id_employment_no').addEventListener('blur', function() {
+        checkFieldAvailability('employment_no', this.value);
+    });
+
+    document.getElementById('id_bank_account_no').addEventListener('blur', function() {
+        checkFieldAvailability('bank_account_no', this.value);
+    });
+</script>
+
 <style>
     form {
     width: 100%;

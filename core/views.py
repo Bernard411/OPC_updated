@@ -536,44 +536,76 @@ from django.contrib import messages
 from .forms import RegistrationForm
 from .models import Employee, Role
 from django.contrib.auth.models import User
-
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            # Create the user
-            user = User.objects.create_user(
-                username=form.cleaned_data['username'],
-                email=form.cleaned_data['email'],
-                password=form.cleaned_data['password']
-            )
+            # Check if the username, email, employment number, or bank account number already exists
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            employment_no = form.cleaned_data['employment_no']
+            bank_account_no = form.cleaned_data['bank_account_no']
+            
+            # Validation for existing fields
+            if User.objects.filter(username=username).exists():
+                form.add_error('username', 'Username already exists.')
+            if User.objects.filter(email=email).exists():
+                form.add_error('email', 'Email already exists.')
+            if Employee.objects.filter(employment_no=employment_no).exists():
+                form.add_error('employment_no', 'Employment number already exists.')
+            if Employee.objects.filter(bank_account_no=bank_account_no).exists():
+                form.add_error('bank_account_no', 'Bank account number already exists.')
 
-            # Create the employee record
-            role = Role.objects.get(role_name=form.cleaned_data['role'])
-            employee = Employee.objects.create(
-                user=user,
-                name=form.cleaned_data['name'],
-                grade=form.cleaned_data['grade'],
-                post=role,
-                employment_no=form.cleaned_data['employment_no'],
-                contact_address=form.cleaned_data['contact_address'],
-                bank_name=form.cleaned_data['bank_name'],
-                bank_account_no=form.cleaned_data['bank_account_no'],
-                annual_leave_entitlement=form.cleaned_data['annual_leave_entitlement']
-            )
+            if form.errors:
+                messages.error(request, 'There was an error in the form. Please check your input.')
+            else:
+                # Create the user and employee records if all fields are unique
+                user = User.objects.create_user(
+                    username=username,
+                    email=email,
+                    password=form.cleaned_data['password']
+                )
 
-            # Log the user in and redirect to the appropriate dashboard
-            login(request, user)
-            messages.success(request, 'Registration successful! You are now logged in.')
+                role = Role.objects.get(role_name=form.cleaned_data['role'])
+                employee = Employee.objects.create(
+                    user=user,
+                    name=form.cleaned_data['name'],
+                    grade=form.cleaned_data['grade'],
+                    post=role,
+                    employment_no=form.cleaned_data['employment_no'],
+                    contact_address=form.cleaned_data['contact_address'],
+                    bank_name=form.cleaned_data['bank_name'],
+                    bank_account_no=form.cleaned_data['bank_account_no'],
+                    annual_leave_entitlement=form.cleaned_data['annual_leave_entitlement']
+                )
 
-            # Redirect to the home page or user dashboard
-            return redirect('hr_dashboard')  # Replace with a specific dashboard URL if needed
-        else:
-            messages.error(request, 'There was an error in the form. Please check your input.')
+                # Log the user in and redirect to the appropriate dashboard
+                login(request, user)
+                messages.success(request, 'Registration successful! You are now logged in.')
+                return redirect('hr_dashboard')
     else:
         form = RegistrationForm()
 
     return render(request, 'hr/register.html', {'form': form})
+from django.http import JsonResponse
+from .models import User, Employee
+
+def check_field_availability(request):
+    field = request.GET.get('field')
+    value = request.GET.get('value')
+    exists = False
+
+    if field == 'username':
+        exists = User.objects.filter(username=value).exists()
+    elif field == 'email':
+        exists = User.objects.filter(email=value).exists()
+    elif field == 'employment_no':
+        exists = Employee.objects.filter(employment_no=value).exists()
+    elif field == 'bank_account_no':
+        exists = Employee.objects.filter(bank_account_no=value).exists()
+
+    return JsonResponse({'exists': exists})
+
 
 # views.py
 # from .forms import EmailAuthenticationForm

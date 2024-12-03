@@ -19,6 +19,33 @@ class RegistrationForm(forms.ModelForm):
         model = User
         fields = ['username', 'email', 'password']
 
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        # Convert spaces to underscores
+        username = username.replace(' ', '_')
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("Username already exists.")
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("Email already exists.")
+        return email
+
+    def clean_employment_no(self):
+        employment_no = self.cleaned_data['employment_no']
+        if Employee.objects.filter(employment_no=employment_no).exists():
+            raise forms.ValidationError("Employment number already exists.")
+        return employment_no
+
+    def clean_bank_account_no(self):
+        bank_account_no = self.cleaned_data['bank_account_no']
+        if Employee.objects.filter(bank_account_no=bank_account_no).exists():
+            raise forms.ValidationError("Bank account number already exists.")
+        return bank_account_no
+
+
 # forms.py
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
