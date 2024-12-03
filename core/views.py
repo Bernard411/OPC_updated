@@ -582,7 +582,7 @@ def register(request):
                 # Log the user in and redirect to the appropriate dashboard
                 login(request, user)
                 messages.success(request, 'Registration successful! You are now logged in.')
-                return redirect('hr_dashboard')
+                return redirect('employee_list')
     else:
         form = RegistrationForm()
 
