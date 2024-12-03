@@ -1,0 +1,221 @@
+{% load static %}
+
+{% include 'head.html' %}
+<body class="g-sidenav-show  bg-gray-100" style="zoom: 60%;">
+  {% include 'side3.html' %}
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <!-- Navbar -->
+    {% include 'nav1.html' %}
+    <!-- End Navbar -->
+    <div class="container-fluid py-2">
+      <div class="row">
+        <div class="ms-3">
+  
+          <p class="mb-4" style="font-weight: bold; font-family:Poppins;">
+           leave application system
+          </p>
+   
+        
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Check if zoom level is already stored in localStorage
+            const savedZoomLevel = localStorage.getItem("zoomLevel");
+    
+            // If a zoom level exists, apply it
+            if (savedZoomLevel) {
+                document.body.style.zoom = savedZoomLevel;
+            } else {
+                // If no zoom level is saved, apply the default (80%)
+                document.body.style.zoom = "70%";
+                localStorage.setItem("zoomLevel", "70%");  // Store the zoom level in localStorage
+            }
+        });
+    </script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+           
+            font-size: small;
+        }
+
+       
+    </style>
+
+    <input type="text" style="width: 100%" id="filterInput" onkeyup="filterTable()" placeholder="Search by employee name..." />
+    <div class="card my-4 mt-5">
+          
+      <div class="card-body" style="background-color: #e1e2e2;">
+        <h3 class="mb-0 h4 font-weight-bolder" style="font-weight: bold; font-family:Poppins;">
+            <img src="{% static 'mw.png' %}" class="navbar-brand-img" width="26" height="26" alt="main_logo">
+            HR Dashboard - Update User - {{ employee.name }}</h3>
+     
+     
+              <style>
+         /* General Form Styling */
+form {
+    
+    width: 1005;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+/* Fieldset Styling */
+fieldset {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+legend {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Labels and Inputs */
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+input, select, textarea {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Submit Button */
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    form {
+        padding: 15px;
+    }
+
+    input, select, textarea {
+        width: calc(100% - 10px);
+    }
+}
+
+              </style>
+          </head>
+          
+          
+                 
+          <form method="POST" action="{% url 'edit_employee' employee.id %}">
+            {% csrf_token %}
+            <fieldset>
+                <legend>Edit Employee</legend>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" value="{{ employee.name }}" required>
+        
+                <label for="grade">Grade:</label>
+                <select id="grade" name="grade" required>
+                    {% for grade_value, grade_label in employee.GRADE_CHOICES %}
+                        <option value="{{ grade_value }}" {% if grade_value == employee.grade %}selected{% endif %}>{{ grade_label }}</option>
+                    {% endfor %}
+                </select>
+        
+                <label for="employment_no">Employment No:</label>
+                <input type="text" id="employment_no" name="employment_no" value="{{ employee.employment_no }}" required>
+        
+                <label for="contact_address">Contact Address:</label>
+                <textarea id="contact_address" name="contact_address" rows="3" required>{{ employee.contact_address }}</textarea>
+        
+                <label for="bank_name">Bank Name:</label>
+                <input type="text" id="bank_name" name="bank_name" value="{{ employee.bank_name }}" required>
+        
+                <label for="bank_account_no">Bank Account No:</label>
+                <input type="text" id="bank_account_no" name="bank_account_no" value="{{ employee.bank_account_no }}" required>
+        
+                <label for="password">New Password (Optional):</label>
+                <input type="password" id="password" name="password">
+        
+                <button type="submit" class="btn btn-success btn-sm">Save Changes</button>
+            </fieldset>
+        </form>
+        
+              </div>
+          
+              <script>
+                  // JavaScript function to filter the table rows based on the input value
+                  function filterTable() {
+                      let input, filter, table, tr, td, i, txtValue;
+                      input = document.getElementById("filterInput");
+                      filter = input.value.toUpperCase();
+                      table = document.getElementById("leaveTable");
+                      tr = table.getElementsByTagName("tr");
+          
+                      for (i = 1; i < tr.length; i++) {
+                          td = tr[i].getElementsByTagName("td")[0]; // Search only in the first column (Employee Name)
+                          if (td) {
+                              txtValue = td.textContent || td.innerText;
+                              if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                  tr[i].style.display = "";
+                              } else {
+                                  tr[i].style.display = "none";
+                              }
+                          }
+                      }
+                  }
+              </script>
+          </body>
+          
+          </html>
+          
+</body>
+</html>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!--   Core JS Files   -->
+  <script src="{% static 'assets/js/core/popper.min.js' %}"></script>
+  <script src="{% static 'assets/js/core/bootstrap.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/perfect-scrollbar.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/smooth-scrollbar.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/chartjs.min.js' %}"></script>
+  
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="{% static 'assets/js/material-dashboard.min.js' %}"></script>

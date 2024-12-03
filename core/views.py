@@ -659,6 +659,38 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.shortcuts import redirect, render
 
+# def login_view(request):
+#     if request.method == "POST":
+#         user = EmailBackEnd.authenticate(request, username=request.POST.get('email'), password=request.POST.get('password'))
+#         if user is not None:
+#             login(request, user)
+#             messages.success(request, 'You have successfully logged in!')
+            
+#             # Redirect user based on role
+#             if user.employee.post and user.employee.post.role_name == 'HR':
+#                 return redirect('hr_dashboard')
+#             elif user.employee.post and user.employee.post.role_name == 'Supervisor':
+#                 return redirect('supervisor_dashboard')
+#             elif user.employee.post and user.employee.post.role_name == 'Head of Department':
+#                 return redirect('head_of_section_dashboard')
+
+#             elif user.employee.post and user.employee.post.role_name == 'Employee':
+#                 return redirect('homepage')
+
+#             else:
+#                 return redirect('admin_dash')  # Default page for employees with no specific role
+                
+#         else:
+#             messages.error(request, "Invalid Login Credentials!")
+#             return render(request, 'login.html')
+#     else:
+#         return render(request, 'login.html')
+
+from django.shortcuts import redirect
+from django.contrib.auth import login
+from django.contrib import messages
+from .models import Employee
+
 def login_view(request):
     if request.method == "POST":
         user = EmailBackEnd.authenticate(request, username=request.POST.get('email'), password=request.POST.get('password'))
@@ -666,16 +698,21 @@ def login_view(request):
             login(request, user)
             messages.success(request, 'You have successfully logged in!')
             
-            # Redirect user based on role
-            if user.employee.post and user.employee.post.role_name == 'HR':
-                return redirect('hr_dashboard')
-            elif user.employee.post and user.employee.post.role_name == 'Supervisor':
-                return redirect('supervisor_dashboard')
-            elif user.employee.post and user.employee.post.role_name == 'Head of Department':
-                return redirect('head_of_section_dashboard')
-            else:
-                return redirect('homepage')  # Default page for employees with no specific role
-                
+            # Check if the user has an associated employee record
+            try:
+                employee = user.employee
+                if employee.post and employee.post.role_name == 'HR':
+                    return redirect('hr_dashboard')
+                elif employee.post and employee.post.role_name == 'Supervisor':
+                    return redirect('supervisor_dashboard')
+                elif employee.post and employee.post.role_name == 'Head of Department':
+                    return redirect('head_of_section_dashboard')
+                elif employee.post and employee.post.role_name == 'Employee':
+                    return redirect('homepage')
+            except Employee.DoesNotExist:
+                # If the user doesn't have an associated Employee record, redirect to the Django admin dashboard
+                return redirect('/admin/')  # Redirect to Django admin interface
+
         else:
             messages.error(request, "Invalid Login Credentials!")
             return render(request, 'login.html')

@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from . import  admin_v
 
 urlpatterns = [
     path('hr-dashboard/', views.hr_dashboard, name='hr_dashboard'),
@@ -43,6 +44,7 @@ urlpatterns = [
     path("upload-employees/", views.upload_employees_excel, name="upload_employees_excel"),
    
     path('check_field_availability/', views.check_field_availability, name='check_field_availability'),
+    path('ad/home/', admin_v.home_admin, name='ad_dash'),
 
     
 
