@@ -7,7 +7,8 @@ class Role(models.Model):
         ('HR', 'HR'),
         ('Supervisor', 'Supervisor'),
         ('Head of Department', 'Head of Department'),
-        ('Employee', 'Employee'),  # For an employee with no specific role
+        ('Employee', 'Employee'), 
+        ('System Administrator', 'System Administrator'),  # For an System Administrator with no specific role
     ]
 
     role_name = models.CharField(

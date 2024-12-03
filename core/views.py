@@ -586,7 +586,7 @@ def register(request):
     else:
         form = RegistrationForm()
 
-    return render(request, 'hr/register.html', {'form': form})
+    return render(request, 'admin_z/register.html', {'form': form})
 from django.http import JsonResponse
 from .models import User, Employee
 
@@ -709,6 +709,9 @@ def login_view(request):
                     return redirect('head_of_section_dashboard')
                 elif employee.post and employee.post.role_name == 'Employee':
                     return redirect('homepage')
+                elif employee.post and employee.post.role_name == 'System Administrator':
+                    return redirect('ad_dash')
+
             except Employee.DoesNotExist:
                 # If the user doesn't have an associated Employee record, redirect to the Django admin dashboard
                 return redirect('/admin/')  # Redirect to Django admin interface
@@ -943,7 +946,7 @@ def employee_list(request):
         "page_obj" : page_obj
 
     }
-    return render(request, 'hr/emp.html', context)
+    return render(request, 'admin_z/emp.html', context)
 
 
 from django.shortcuts import get_object_or_404, redirect
@@ -978,7 +981,7 @@ def edit_employee(request, employee_id):
         employee.save()
         return redirect('employee_list')
 
-    return render(request, 'hr/edit_employee.html', {'employee': employee})
+    return render(request, 'admin_z/edit_employee.html', {'employee': employee})
 
 
 from django.shortcuts import render, redirect

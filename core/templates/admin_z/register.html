@@ -1,0 +1,290 @@
+{% load static %}
+
+{% include 'head.html' %}
+<body class="g-sidenav-show  bg-gray-100" style="zoom: 60%;">
+    {% include 'side5.html' %}
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <!-- Navbar -->
+    {% include 'nav4.html' %}
+    <!-- End Navbar -->
+    <div class="container-fluid py-2">
+      <div class="row">
+        <div class="ms-3">
+      
+          <p class="mb-4" style="font-weight: bold; font-family:Poppins;">
+           leave application system
+          </p>
+   
+        
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Check if zoom level is already stored in localStorage
+            const savedZoomLevel = localStorage.getItem("zoomLevel");
+    
+            // If a zoom level exists, apply it
+            if (savedZoomLevel) {
+                document.body.style.zoom = savedZoomLevel;
+            } else {
+                // If no zoom level is saved, apply the default (80%)
+                document.body.style.zoom = "70%";
+                localStorage.setItem("zoomLevel", "70%");  // Store the zoom level in localStorage
+            }
+        });
+    </script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+           
+            font-size: small;
+        }
+
+       
+    </style>
+        <div class="card my-4 mt-5">
+            
+          
+            <div class="card-body" style="background-color: #e1e2e2;">
+                <span style="font-weight: bold;">
+                    <i class="fa fa-user" aria-hidden="true"></i> <b>Create Employee</b>
+                </span>
+                <form method="POST" action="{% url 'register' %}" style="margin-top: 2px;">
+                    {% csrf_token %}
+                    <div class="form-field">
+                        {{ form.username.label_tag }}
+                        {{ form.username }}
+                        {% if form.username.errors %}
+                            <div class="error-message">
+                                {% for error in form.username.errors %}
+                                    <p style="color: red;">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-field">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="error-message">
+                                {% for error in form.email.errors %}
+                                    <p style="color: red;">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-field">
+                        {{ form.password.label_tag }}
+                        {{ form.password }}
+                        {% if form.password.errors %}
+                            <div class="error-message">
+                                {% for error in form.password.errors %}
+                                    <p style="color: red;">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-field">
+                        {{ form.name.label_tag }}
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="error-message">
+                                {% for error in form.name.errors %}
+                                    <p style="color: red;">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-field">
+                        {{ form.grade.label_tag }}
+                        {{ form.grade }}
+                        {% if form.grade.errors %}
+                            <div class="error-message">
+                                {% for error in form.grade.errors %}
+                                    <p style="color: red;">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-field">
+                        {{ form.role.label_tag }}
+                        {{ form.role }}
+                        {% if form.role.errors %}
+                            <div class="error-message">
+                                {% for error in form.role.errors %}
+                                    <p style="color: red;">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-field">
+                        {{ form.employment_no.label_tag }}
+                        {{ form.employment_no }}
+                        {% if form.employment_no.errors %}
+                            <div class="error-message">
+                                {% for error in form.employment_no.errors %}
+                                    <p style="color: red;">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-field">
+                        {{ form.contact_address.label_tag }}
+                        {{ form.contact_address }}
+                        {% if form.contact_address.errors %}
+                            <div class="error-message">
+                                {% for error in form.contact_address.errors %}
+                                    <p style="color: red;">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-field">
+                        {{ form.bank_name.label_tag }}
+                        {{ form.bank_name }}
+                        {% if form.bank_name.errors %}
+                            <div class="error-message">
+                                {% for error in form.bank_name.errors %}
+                                    <p style="color: red;">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-field">
+                        {{ form.bank_account_no.label_tag }}
+                        {{ form.bank_account_no }}
+                        {% if form.bank_account_no.errors %}
+                            <div class="error-message">
+                                {% for error in form.bank_account_no.errors %}
+                                    <p style="color: red;">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-field">
+                        {{ form.annual_leave_entitlement.label_tag }}
+                        {{ form.annual_leave_entitlement }}
+                        {% if form.annual_leave_entitlement.errors %}
+                            <div class="error-message">
+                                {% for error in form.annual_leave_entitlement.errors %}
+                                    <p style="color: red;">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-sm">Register</button>
+                    </div>
+                </form>
+                
+
+<script>
+    function checkFieldAvailability(field, value) {
+        fetch(`/check_field_availability/?field=${field}&value=${value}`)
+            .then(response => response.json())
+            .then(data => {
+                let fieldElement = document.getElementById(field);
+                if (data.exists) {
+                    fieldElement.style.borderColor = 'red';
+                    fieldElement.setCustomValidity(`${field.charAt(0).toUpperCase() + field.slice(1)} already exists.`);
+                } else {
+                    fieldElement.style.borderColor = '';
+                    fieldElement.setCustomValidity('');
+                }
+            });
+    }
+
+    document.getElementById('id_username').addEventListener('blur', function() {
+        checkFieldAvailability('username', this.value);
+    });
+
+    document.getElementById('id_email').addEventListener('blur', function() {
+        checkFieldAvailability('email', this.value);
+    });
+
+    document.getElementById('id_employment_no').addEventListener('blur', function() {
+        checkFieldAvailability('employment_no', this.value);
+    });
+
+    document.getElementById('id_bank_account_no').addEventListener('blur', function() {
+        checkFieldAvailability('bank_account_no', this.value);
+    });
+</script>
+
+<style>
+    form {
+    width: 100%;
+    
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.form-field {
+    margin-bottom: 15px;
+}
+
+.form-field label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-field input, .form-field select, .form-field textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.d-grid {
+    text-align: center;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
+
+</style>
+                </div>
+         
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!--   Core JS Files   -->
+  <script src="{% static 'assets/js/core/popper.min.js' %}"></script>
+  <script src="{% static 'assets/js/core/bootstrap.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/perfect-scrollbar.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/smooth-scrollbar.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/chartjs.min.js' %}"></script>
+  
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="{% static 'assets/js/material-dashboard.min.js' %}"></script>

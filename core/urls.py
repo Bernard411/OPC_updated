@@ -19,8 +19,6 @@ urlpatterns = [
     path('logout_user/', views.logoutuser, name="logout_user"),
     path('success/', views.success_page, name='success'),
     path('home/', views.home, name='homepage'),
-
-
     path('hr/leave-requests/', views.leave_requests_table_hr, name='leave_requests_table_hr'),
     path('sp/leave-requests/', views.leave_requests_table_sp, name='leave_requests_table_sp'),
     path('hd/leave-requests/', views.leave_requests_table_hd, name='leave_requests_table_hd'),
@@ -28,21 +26,17 @@ urlpatterns = [
     
     # URL for handling the submission of the leave request form
     path('submit-leave-requestx/', views.leave_request_handler, name='leave_request_handler'),
-
     path('employees/', views.employee_list, name='employee_list'),  # List all employees
     path('employees/edit/<int:employee_id>/', views.edit_employee, name='edit_employee'),  # Edit employee
     path('employees/delete/<int:employee_id>/', views.delete_employee, name='delete_employee'),  # Delete employee
     path('profile/', views.user_profile, name='user_profile'),
-     
     path('profile/hr', views.user_profile_hr, name='user_profile_hr'),
     path('profile/sp', views.user_profile_sp, name='user_profile_sp'),
     path('profile/hd', views.user_profile_hd, name='user_profile_hd'),
-
     path("export-leave-requests/", views.export_leave_requests_to_excel, name="export_leave_requests"),
     path("export-leave-approvals/", views.export_leave_approvals_to_excel, name="export_leave_approvals"),
     path("export-employees/", views.export_employees_to_excel, name="export_employees"),
     path("upload-employees/", views.upload_employees_excel, name="upload_employees_excel"),
-   
     path('check_field_availability/', views.check_field_availability, name='check_field_availability'),
     path('ad/home/', admin_v.home_admin, name='ad_dash'),
 

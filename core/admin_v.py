@@ -5,4 +5,4 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def home_admin(request):
-    return render(request, 'admin/index.html')
+    return render(request, 'admin_z/index.html')
