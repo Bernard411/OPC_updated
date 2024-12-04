@@ -15,10 +15,10 @@ urlpatterns = [
     path('', views.login_view, name='login_view' ),
 
     path('leave/request/', views.create_leave_request, name='submit_leave_request'),
-    path('leave/request/sp', views.create_leave_request_sp, name='submit_leave_request_sp'),
-    path('leave/request/hd', views.create_leave_request_hd, name='submit_leave_request_hd'),
-    path('leave/request/hr', views.create_leave_request_hr, name='submit_leave_request_hr'),
-    path('leave/request/adm', views.create_leave_request_adm, name='submit_leave_request_adm'),
+    path('leave/request/sp/', views.create_leave_request_sp, name='submit_leave_request_sp'),
+    path('leave/request/hd/', views.create_leave_request_hd, name='submit_leave_request_hd'),
+    path('leave/request/hr/', views.create_leave_request_hr, name='submit_leave_request_hr'),
+    path('leave/request/adm/', views.create_leave_request_adm, name='submit_leave_request_adm'),
 
     path('generate-pdf/<int:leave_id>/', views.generate_leave_form_view, name='generate_leave_form_view'),
     path('leave-requests/', views.leave_requests_table, name='leave_requests_table'),

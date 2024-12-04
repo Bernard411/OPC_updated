@@ -80,7 +80,7 @@ def create_leave_request_sp(request):
 
         # Show a success message
         messages.success(request, 'Your leave request has been submitted and is pending approval.')
-        return redirect('homepage')
+        return redirect('supervisor_dashboard')
     
     # Fetch all leave requests to display
     leave_requests = LeaveRequest.objects.filter(user=request.user)  # Only show the logged-in user's leave requests
@@ -130,7 +130,7 @@ def create_leave_request_hr(request):
 
         # Show a success message
         messages.success(request, 'Your leave request has been submitted and is pending approval.')
-        return redirect('homepage')
+        return redirect('hr_dashboard')
     
     # Fetch all leave requests to display
     leave_requests = LeaveRequest.objects.filter(user=request.user)  # Only show the logged-in user's leave requests
@@ -180,7 +180,7 @@ def create_leave_request_hd(request):
 
         # Show a success message
         messages.success(request, 'Your leave request has been submitted and is pending approval.')
-        return redirect('homepage')
+        return redirect('head_of_section_dashboard')
     
     # Fetch all leave requests to display
     leave_requests = LeaveRequest.objects.filter(user=request.user)  # Only show the logged-in user's leave requests
@@ -230,7 +230,7 @@ def create_leave_request_adm(request):
 
         # Show a success message
         messages.success(request, 'Your leave request has been submitted and is pending approval.')
-        return redirect('homepage')
+        return redirect('ad_dash')
     
     # Fetch all leave requests to display
     leave_requests = LeaveRequest.objects.filter(user=request.user)  # Only show the logged-in user's leave requests

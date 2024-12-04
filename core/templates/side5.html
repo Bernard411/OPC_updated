@@ -21,6 +21,13 @@
       </li> -->
       
       <li class="nav-item">
+        <a href="{% url 'ad_dash' %}" class="nav-link text-dark {% if request.path == '/ad/home/' %}active bg-gradient-dark text-white {% endif %}">
+          <i class="material-symbols-rounded opacity-5">person_add</i>
+          <span class="nav-link-text ms-1">Home</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
         <a href="{% url 'register' %}" class="nav-link text-dark {% if request.path == '/register/' %}active bg-gradient-dark text-white {% endif %}">
           <i class="material-symbols-rounded opacity-5">person_add</i>
           <span class="nav-link-text ms-1">Create Employee</span>
@@ -35,7 +42,7 @@
       </li>
 
       <li class="nav-item">
-        <a href="{% url 'submit_leave_request_adm' %}" class="nav-link text-dark  {% if request.path == '/leave/request/' %}active  bg-gradient-dark text-white {% endif %}">
+        <a href="{% url 'submit_leave_request_adm' %}" class="nav-link text-dark  {% if request.path == '/leave/request/adm/' %}active  bg-gradient-dark text-white {% endif %}">
           <i class="material-symbols-rounded opacity-5">table_view</i>
           <span class="nav-link-text ms-1">Request Leave</span>
         </a>
