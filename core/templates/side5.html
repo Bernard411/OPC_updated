@@ -33,6 +33,13 @@
           <span class="nav-link-text ms-1">Manage Employees</span>
         </a>
       </li>
+
+      <li class="nav-item">
+        <a href="{% url 'submit_leave_request_adm' %}" class="nav-link text-dark  {% if request.path == '/leave/request/' %}active  bg-gradient-dark text-white {% endif %}">
+          <i class="material-symbols-rounded opacity-5">table_view</i>
+          <span class="nav-link-text ms-1">Request Leave</span>
+        </a>
+      </li>
       
       <!-- <li class="nav-item">
         <a href="{% url 'leave_request_form' %}" class="nav-link text-dark {% if request.path == '/leave-requestx/' %}active bg-gradient-dark text-white {% endif %}">

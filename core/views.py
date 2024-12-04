@@ -54,6 +54,206 @@ def create_leave_request(request):
 
     return render(request, 'request_leave.html', {'leave_requests': leave_requests_data})
 
+def create_leave_request_sp(request):
+    if request.method == 'POST':
+        # Get the data from the form
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        number_of_days = int(request.POST.get('number_of_days'))
+        contact_address = request.POST.get('contact_address_during_leave', '')  # Default to empty string if not provided
+        leave_grant_requested = request.POST.get('leave_grant_requested', '')
+        
+        # Get the employee object associated with the logged-in user
+        employee = request.user.employee  # Assuming the logged-in user has an associated Employee object
+
+        # Create the leave request object and associate the user
+        leave_request = LeaveRequest(
+            employee=employee,
+            start_date=start_date,
+            end_date=end_date,
+            number_of_days=number_of_days,
+            contact_address_during_leave=contact_address,
+            leave_grant_requested=leave_grant_requested,
+            user=request.user  # Set the logged-in user to the 'user' field
+        )
+        leave_request.save()
+
+        # Show a success message
+        messages.success(request, 'Your leave request has been submitted and is pending approval.')
+        return redirect('homepage')
+    
+    # Fetch all leave requests to display
+    leave_requests = LeaveRequest.objects.filter(user=request.user)  # Only show the logged-in user's leave requests
+
+    leave_requests_data = []
+    for leave in leave_requests:
+        # Check if the approval exists for 'Head of Department'
+        head_approved = leave.leaveapproval_set.filter(
+            approver_role__role_name='Head of Department',  # Match database role name
+            approval_status='Approved'  # Use the correct field name
+        ).exists()
+
+        leave_requests_data.append({
+            'id': leave.id,
+            'employee_name': leave.employee.name,
+            'start_date': leave.start_date,
+            'end_date': leave.end_date,
+            'status': "Approved by Head" if head_approved else "Pending",
+            'download_enabled': head_approved,  # Enable only if Head approved
+        })
+
+    return render(request, 'sp/request_leave.html', {'leave_requests': leave_requests_data})
+
+def create_leave_request_hr(request):
+    if request.method == 'POST':
+        # Get the data from the form
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        number_of_days = int(request.POST.get('number_of_days'))
+        contact_address = request.POST.get('contact_address_during_leave', '')  # Default to empty string if not provided
+        leave_grant_requested = request.POST.get('leave_grant_requested', '')
+        
+        # Get the employee object associated with the logged-in user
+        employee = request.user.employee  # Assuming the logged-in user has an associated Employee object
+
+        # Create the leave request object and associate the user
+        leave_request = LeaveRequest(
+            employee=employee,
+            start_date=start_date,
+            end_date=end_date,
+            number_of_days=number_of_days,
+            contact_address_during_leave=contact_address,
+            leave_grant_requested=leave_grant_requested,
+            user=request.user  # Set the logged-in user to the 'user' field
+        )
+        leave_request.save()
+
+        # Show a success message
+        messages.success(request, 'Your leave request has been submitted and is pending approval.')
+        return redirect('homepage')
+    
+    # Fetch all leave requests to display
+    leave_requests = LeaveRequest.objects.filter(user=request.user)  # Only show the logged-in user's leave requests
+
+    leave_requests_data = []
+    for leave in leave_requests:
+        # Check if the approval exists for 'Head of Department'
+        head_approved = leave.leaveapproval_set.filter(
+            approver_role__role_name='Head of Department',  # Match database role name
+            approval_status='Approved'  # Use the correct field name
+        ).exists()
+
+        leave_requests_data.append({
+            'id': leave.id,
+            'employee_name': leave.employee.name,
+            'start_date': leave.start_date,
+            'end_date': leave.end_date,
+            'status': "Approved by Head" if head_approved else "Pending",
+            'download_enabled': head_approved,  # Enable only if Head approved
+        })
+
+    return render(request, 'hr/request_leave.html', {'leave_requests': leave_requests_data})
+
+def create_leave_request_hd(request):
+    if request.method == 'POST':
+        # Get the data from the form
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        number_of_days = int(request.POST.get('number_of_days'))
+        contact_address = request.POST.get('contact_address_during_leave', '')  # Default to empty string if not provided
+        leave_grant_requested = request.POST.get('leave_grant_requested', '')
+        
+        # Get the employee object associated with the logged-in user
+        employee = request.user.employee  # Assuming the logged-in user has an associated Employee object
+
+        # Create the leave request object and associate the user
+        leave_request = LeaveRequest(
+            employee=employee,
+            start_date=start_date,
+            end_date=end_date,
+            number_of_days=number_of_days,
+            contact_address_during_leave=contact_address,
+            leave_grant_requested=leave_grant_requested,
+            user=request.user  # Set the logged-in user to the 'user' field
+        )
+        leave_request.save()
+
+        # Show a success message
+        messages.success(request, 'Your leave request has been submitted and is pending approval.')
+        return redirect('homepage')
+    
+    # Fetch all leave requests to display
+    leave_requests = LeaveRequest.objects.filter(user=request.user)  # Only show the logged-in user's leave requests
+
+    leave_requests_data = []
+    for leave in leave_requests:
+        # Check if the approval exists for 'Head of Department'
+        head_approved = leave.leaveapproval_set.filter(
+            approver_role__role_name='Head of Department',  # Match database role name
+            approval_status='Approved'  # Use the correct field name
+        ).exists()
+
+        leave_requests_data.append({
+            'id': leave.id,
+            'employee_name': leave.employee.name,
+            'start_date': leave.start_date,
+            'end_date': leave.end_date,
+            'status': "Approved by Head" if head_approved else "Pending",
+            'download_enabled': head_approved,  # Enable only if Head approved
+        })
+
+    return render(request, 'hd/request_leave.html', {'leave_requests': leave_requests_data})
+
+def create_leave_request_adm(request):
+    if request.method == 'POST':
+        # Get the data from the form
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        number_of_days = int(request.POST.get('number_of_days'))
+        contact_address = request.POST.get('contact_address_during_leave', '')  # Default to empty string if not provided
+        leave_grant_requested = request.POST.get('leave_grant_requested', '')
+        
+        # Get the employee object associated with the logged-in user
+        employee = request.user.employee  # Assuming the logged-in user has an associated Employee object
+
+        # Create the leave request object and associate the user
+        leave_request = LeaveRequest(
+            employee=employee,
+            start_date=start_date,
+            end_date=end_date,
+            number_of_days=number_of_days,
+            contact_address_during_leave=contact_address,
+            leave_grant_requested=leave_grant_requested,
+            user=request.user  # Set the logged-in user to the 'user' field
+        )
+        leave_request.save()
+
+        # Show a success message
+        messages.success(request, 'Your leave request has been submitted and is pending approval.')
+        return redirect('homepage')
+    
+    # Fetch all leave requests to display
+    leave_requests = LeaveRequest.objects.filter(user=request.user)  # Only show the logged-in user's leave requests
+
+    leave_requests_data = []
+    for leave in leave_requests:
+        # Check if the approval exists for 'Head of Department'
+        head_approved = leave.leaveapproval_set.filter(
+            approver_role__role_name='Head of Department',  # Match database role name
+            approval_status='Approved'  # Use the correct field name
+        ).exists()
+
+        leave_requests_data.append({
+            'id': leave.id,
+            'employee_name': leave.employee.name,
+            'start_date': leave.start_date,
+            'end_date': leave.end_date,
+            'status': "Approved by Head" if head_approved else "Pending",
+            'download_enabled': head_approved,  # Enable only if Head approved
+        })
+
+    return render(request, 'admin_z/request_leave.html', {'leave_requests': leave_requests_data})
+
 
 
 # @login_required

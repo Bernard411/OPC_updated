@@ -1,0 +1,220 @@
+{% load static %}
+
+{% include 'head.html' %}
+<body class="g-sidenav-show  bg-gray-100" style="zoom: 60%;">
+  {% include 'side3.html' %}
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <!-- Navbar -->
+    {% include 'nav.html' %}
+    <!-- End Navbar -->
+    <div class="container-fluid py-2">
+      <div class="row">
+        <div class="ms-3">
+       
+          <p class="mb-4" style="font-weight: bold; font-family:Poppins;">
+           leave application system
+          </p>
+        </div>
+  
+        
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Check if zoom level is already stored in localStorage
+            const savedZoomLevel = localStorage.getItem("zoomLevel");
+    
+            // If a zoom level exists, apply it
+            if (savedZoomLevel) {
+                document.body.style.zoom = savedZoomLevel;
+            } else {
+                // If no zoom level is saved, apply the default (80%)
+                document.body.style.zoom = "70%";
+                localStorage.setItem("zoomLevel", "70%");  // Store the zoom level in localStorage
+            }
+        });
+    </script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+           
+            font-size: small;
+        }
+
+       
+    </style>
+
+      <div class="col-12" >
+        <div class="card my-4 mt-5">
+          
+          <div class="card-body" style="background-color: #e1e2e2;">
+                <style>
+               
+                    /* Form Container */
+                 
+            
+                    /* Form Header */
+                  
+            
+                    /* Form Elements */
+                    label {
+                        font-size: 0.95rem;
+                        font-weight: bold;
+                        color: #333;
+                        display: block;
+                        margin-bottom: 5px;
+                    }
+            
+                    input, textarea {
+                        width: 100%;
+                        padding: 10px;
+                        border: 1px solid #ddd;
+                        border-radius: 5px;
+                        font-size: 1rem;
+                        color: #333;
+                        margin-bottom: 15px;
+                    }
+            
+                    textarea {
+                        resize: none;
+                        height: 80px;
+                    }
+            
+                    input:focus, textarea:focus {
+                        outline: none;
+                        border-color: #0056b3;
+                        box-shadow: 0 0 5px rgba(0, 86, 179, 0.3);
+                    }
+            
+                    button {
+                        width: 100%;
+                        background-color: #0056b3;
+                        color: #fff;
+                        font-size: 1rem;
+                        padding: 10px 15px;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        transition: background-color 0.3s ease;
+                    }
+            
+                    button:hover {
+                        background-color: #004494;
+                    }
+            
+                    /* Responsive Design */
+                    @media screen and (max-width: 768px) {
+                        .form-container {
+                            padding: 15px;
+                        }
+                    }
+                </style>
+            
+                <h3 class="mb-0 h4 font-weight-bolder" style="font-weight: bold; font-family:Poppins;">
+                    <img src="{% static 'mw.png' %}" class="navbar-brand-img" width="26" height="26" alt="main_logo">
+                    Opc Leave Application</h3>
+                <form action="{% url 'submit_leave_request' %}" method="POST" class="leave-form">
+                    {% csrf_token %}
+                    
+                    <label for="start_date">Start Date:</label>
+                    <input type="date" id="start_date" name="start_date" required><br><br>
+                
+                    <label for="end_date">End Date:</label>
+                    <input type="date" id="end_date" name="end_date" required><br><br>
+                
+                    <label for="number_of_days">Number of Days:</label>
+                    <input type="number" id="number_of_days" name="number_of_days" required><br><br>
+                
+                    <label for="contact_address">Contact Address During Leave:</label>
+                    <textarea id="contact_address" name="contact_address_during_leave" rows="4" cols="50"></textarea><br><br>
+                
+                    <label for="leave_grant">Leave Grant Requested:</label>
+                    <input type="text" id="leave_grant" name="leave_grant_requested"><br><br>
+                
+               
+                        <button type="submit" class="btn btn-success btn-sm">Request Leave</button>
+       
+                </form>
+                
+                </div>
+            </body>
+            </html>
+          </div>
+
+          <style>
+            /* Form container */
+            .leave-form {
+               
+                margin: 20px auto;
+                padding: 20px;
+                background-color: #f9f9f9;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow applied here */
+            }
+        
+            /* Form inputs and textareas */
+            .leave-form input,
+            .leave-form textarea {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                font-size: 1rem;
+                color: #333;
+                margin-bottom: 15px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Box shadow for inputs */
+            }
+        
+            .leave-form input:focus,
+            .leave-form textarea:focus {
+                outline: none;
+                border-color: #0056b3;
+                box-shadow: 0 0 5px rgba(0, 86, 179, 0.3); /* Focused state shadow */
+            }
+        
+            /* Button styling */
+            .leave-form button {
+                width: 100%;
+                background-color: #0056b3;
+                color: #fff;
+                font-size: 1rem;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+        
+            .leave-form button:hover {
+                background-color: #004494;
+            }
+        </style>
+        
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!--   Core JS Files   -->
+  <script src="{% static 'assets/js/core/popper.min.js' %}"></script>
+  <script src="{% static 'assets/js/core/bootstrap.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/perfect-scrollbar.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/smooth-scrollbar.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/chartjs.min.js' %}"></script>
+  
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="{% static 'assets/js/material-dashboard.min.js' %}"></script>
+</body>
+

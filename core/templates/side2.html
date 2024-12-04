@@ -16,9 +16,16 @@
        <li class="nav-item">
          <a href="{% url 'supervisor_dashboard' %}" class="nav-link text-dark  {% if request.path == '/supervisor-dashboard/' %}active  bg-gradient-dark text-white {% endif %}">
            <i class="material-symbols-rounded opacity-5">table_view</i>
-           <span class="nav-link-text ms-1">Leave Requests</span>
+           <span class="nav-link-text ms-1">Requests Lists</span>
          </a>
        </li>
+
+       <li class="nav-item">
+        <a href="{% url 'submit_leave_request_sp' %}" class="nav-link text-dark  {% if request.path == '/leave/request/' %}active  bg-gradient-dark text-white {% endif %}">
+          <i class="material-symbols-rounded opacity-5">table_view</i>
+          <span class="nav-link-text ms-1">Request Leave</span>
+        </a>
+      </li>
 
        <li class="nav-item">
         <a href="{% url 'leave_requests_table_sp' %}" class="nav-link text-dark  {% if request.path == '/sp/leave-requests/' %}active  bg-gradient-dark text-white {% endif %}">
