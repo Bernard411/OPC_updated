@@ -3,6 +3,7 @@ from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 from . import  admin_v
+from . import update_views
 
 urlpatterns = [
     path('hr-dashboard/', views.hr_dashboard, name='hr_dashboard'),
@@ -45,6 +46,17 @@ urlpatterns = [
     path("upload-employees/", views.upload_employees_excel, name="upload_employees_excel"),
     path('check_field_availability/', views.check_field_availability, name='check_field_availability'),
     path('ad/home/', admin_v.home_admin, name='ad_dash'),
+
+    path('leave-request/', update_views.add_leave_request, name='add_leave_request'),
+
+    # URL for viewing the dashboard (annual leave, approved leave days, remaining leave)
+    path('dashboard/', update_views.dashboard, name='dashboard'),
+    path('api/dashboard/', views.dashboard_api, name='dashboard_api'),
+    path('api/leave-countdown/', views.leave_countdown_api, name='leave_countdown_api'),
+
+    path('add_leave_request_hr/', update_views.add_leave_request_hr_x, name='add_leave_request_hr'),
+    path('add_leave_request_sp/', update_views.add_leave_request_sp_x, name='add_leave_request_sp'),
+    path('add_leave_request_hd/', update_views.add_leave_request_hd_x, name='add_leave_request_hd'),
 
     
 

@@ -531,6 +531,30 @@ from django.shortcuts import render
 from .models import LeaveRequest
 
 def home(request):
+    employee = request.user.employee  # Assuming the user has a one-to-one Employee relationship
+    total_annual_leave = employee.annual_leave_entitlement
+
+    # Get all approved leave requests
+    approved_leaves = LeaveApproval.objects.filter(
+        leave_request__employee=employee, 
+        approval_status='Approved'
+    )
+
+    # Sum up the leave days from approved leave requests
+    approved_leave_days = 0
+    for approval in approved_leaves:
+        leave_request = approval.leave_request
+        approved_leave_days += leave_request.calculate_leave_days()
+
+    # Calculate remaining leave days
+    remaining_leave = total_annual_leave - approved_leave_days
+    leave_requests = LeaveRequest.objects.filter(employee=employee, status='Head Approved')
+    leave_countdowns = [leave.countdown() for leave in leave_requests]
+
+   
+        
+    
+
     # Filter leave requests by the currently logged-in user
     leave_requests = LeaveRequest.objects.filter(user=request.user)
 
@@ -555,8 +579,16 @@ def home(request):
     paginator = Paginator(leave_requests_data, 10)  # Show 10 leave requests per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    context = {
+        'employee': employee,
+        'total_annual_leave': total_annual_leave,
+        'approved_leave_days': approved_leave_days,
+        'remaining_leave': remaining_leave,
+        'leave_countdowns': leave_countdowns,
+        'page_obj': page_obj
+    }
     
-    return render(request, 'home.html', {'page_obj': page_obj})
+    return render(request, 'home.html', context)
 
 
 
@@ -1541,3 +1573,126 @@ def upload_employees_excel(request):
         form = ExcelUploadForm()
 
     return render(request, "upload.html", {"form": form})
+
+
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
+
+@login_required
+def dashboard_api(request):
+    try:
+        # Ensure the user has an associated employee profile
+        employee = getattr(request.user, 'employee', None)
+        if not employee:
+            return JsonResponse({'error': 'Employee profile not found for the logged-in user'}, status=400)
+
+        total_annual_leave = employee.annual_leave_entitlement
+
+        # Get all approved leave requests and sum the leave days
+        approved_leaves = LeaveApproval.objects.filter(
+            leave_request__employee=employee, 
+            approval_status='Approved'
+        ).select_related('leave_request')
+
+        approved_leave_days = sum(
+            approval.leave_request.calculate_leave_days() for approval in approved_leaves
+        )
+
+        # Calculate remaining leave days
+        remaining_leave = total_annual_leave - approved_leave_days
+
+        # Leave countdowns
+        leave_requests = LeaveRequest.objects.filter(employee=employee, status='Head Approved')
+        leave_countdowns = [
+            {'id': leave.id, 'countdown': leave.countdown()} for leave in leave_requests
+        ]
+
+        # Return the data as JSON
+        data = {
+            'employee': {
+                'id': employee.id,
+                'name': employee.name,
+            },
+            'total_annual_leave': total_annual_leave,
+            'approved_leave_days': approved_leave_days,
+            'remaining_leave': remaining_leave,
+            'leave_countdowns': leave_countdowns,
+        }
+        return JsonResponse(data, status=200)
+
+    except Exception as e:
+        # Log the error for debugging
+        print(f"Error in dashboard_api: {e}")
+        return JsonResponse({'error': 'An unexpected error occurred. Please try again later.'}, status=500)
+
+
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from datetime import date
+from django.http import JsonResponse
+from .models import LeaveRequest
+
+# def leave_countdown_api(request):
+#     # Get today's date
+#     today = date.today()  # This is where the 'date' class is used
+    
+#     # Get all leave requests that have a valid end date and are not expired
+#     leave_requests = LeaveRequest.objects.filter(
+#         end_date__gte=today,  # Only include requests with an end date in the future
+#         status='Head Approved'  # Filter for approved requests (or adjust as needed)
+#     )
+
+#     countdowns = []
+#     for leave in leave_requests:
+#         countdown = leave.countdown()  # Call the countdown method for each leave request
+#         countdowns.append({
+#             'id': leave.id,
+#             'start_date': leave.start_date,
+#             'end_date': leave.end_date,
+#             'countdown': countdown,
+#         })
+
+#     # Return the countdowns in JSON format
+#     return JsonResponse({'leave_countdowns': countdowns})
+
+from datetime import date
+import logging
+from django.http import JsonResponse
+from .models import LeaveRequest
+
+# Set up logging
+logger = logging.getLogger(__name__)
+
+def leave_countdown_api(request):
+    today = date.today()
+    
+    # Log the date
+    logger.debug(f"Today's date: {today}")
+    
+    # Get all leave requests
+    leave_requests = LeaveRequest.objects.filter(status='Head Approved')
+
+    # Log the leave requests before filtering by end_date
+    logger.debug(f"Leave requests before filtering by end date: {leave_requests}")
+    
+    # Filter leave requests with end_date in the future
+    leave_requests = leave_requests.filter(end_date__gte=today)
+    
+    # Log the leave requests after filtering by end date
+    logger.debug(f"Leave requests after filtering by end date: {leave_requests}")
+    
+    countdowns = []
+    for leave in leave_requests:
+        countdown = leave.countdown()
+        countdowns.append({
+            'id': leave.id,
+            'start_date': leave.start_date,
+            'end_date': leave.end_date,
+            'countdown': countdown,
+        })
+
+    return JsonResponse({'leave_countdowns': countdowns})

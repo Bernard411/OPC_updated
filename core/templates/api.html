@@ -1,0 +1,118 @@
+
+        <!-- Employee Details Card -->
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-header p-2 ps-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-sm mb-0 text-capitalize">Employee</p>
+                            <h4 id="employee-name" class="mb-0">Loading...</h4>
+                        </div>
+                        <div class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
+                            <i class="material-symbols-rounded opacity-10">person</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Annual Leave -->
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-header p-2 ps-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-sm mb-0 text-capitalize">Total Annual Leave</p>
+                            <h4 id="total-annual-leave" class="mb-0">Loading...</h4>
+                        </div>
+                        <div class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
+                            <i class="material-symbols-rounded opacity-10">calendar_month</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Approved Leave Days -->
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-header p-2 ps-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-sm mb-0 text-capitalize">Approved Leave Days</p>
+                            <h4 id="approved-leave-days" class="mb-0">Loading...</h4>
+                        </div>
+                        <div class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
+                            <i class="material-symbols-rounded opacity-10">check_circle</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Remaining Leave Days -->
+        <div class="col-xl-3 col-sm-6">
+            <div class="card">
+                <div class="card-header p-2 ps-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-sm mb-0 text-capitalize">Remaining Annual Leave Days</p>
+                            <h4 id="remaining-leave-days" class="mb-0">Loading...</h4>
+                        </div>
+                        <div class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
+                            <i class="material-symbols-rounded opacity-10">hourglass_bottom</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!-- Leave Countdown -->
+    <div id="leave-countdown-container" class="row mt-4 d-none">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header p-2 ps-3">
+                    <h5 class="mb-0">Leave Countdown</h5>
+                </div>
+                <div class="card-body p-3">
+                    <ul id="leave-countdown-list" class="mb-0"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // Fetch data from the dashboard API
+    const fetchDashboardData = async () => {
+        try {
+            const response = await fetch('/api/dashboard/');
+            if (!response.ok) {
+                throw new Error('Failed to fetch dashboard data');
+            }
+            const data = await response.json();
+
+            // Update the dashboard with API data
+            document.getElementById('employee-name').textContent = data.employee.name;
+            document.getElementById('total-annual-leave').textContent = `${data.total_annual_leave} days`;
+            document.getElementById('approved-leave-days').textContent = `${data.approved_leave_days} days`;
+            document.getElementById('remaining-leave-days').textContent = `${data.remaining_leave} days`;
+
+            // Update leave countdown
+            const countdownContainer = document.getElementById('leave-countdown-container');
+            const countdownList = document.getElementById('leave-countdown-list');
+            if (data.leave_countdowns && data.leave_countdowns.length > 0) {
+                countdownContainer.classList.remove('d-none');
+                data.leave_countdowns.forEach(countdown => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = countdown.countdown;
+                    countdownList.appendChild(listItem);
+                });
+            }
+        } catch (error) {
+            console.error('Error:', error.message);
+        }
+    };
+
+    // Call the function on page load
+    fetchDashboardData();
+</script>
