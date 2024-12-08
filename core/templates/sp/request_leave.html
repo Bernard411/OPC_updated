@@ -2,20 +2,130 @@
 
 {% include 'head.html' %}
 <body class="g-sidenav-show  bg-gray-100" style="zoom: 60%;">
-  {% include 'side.html' %}
+  {% include 'side2.html' %}
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
     <!-- Navbar -->
     {% include 'nav.html' %}
+
+    
     <!-- End Navbar -->
     <div class="container-fluid py-2">
+        <div class="row">
+            <div class="">
+                <h3 class="mb-0 h4 font-weight-bolder">  <img src="{% static 'mw.png' %}" class="navbar-brand-img" width="26" height="26" alt="main_logo"> leave application system</h3>
+                <p class="mb-4">
+                    Employee leave summary and details.
+                </p>
+            </div>
+            
+            <!-- Employee Details Card -->
+            {% include 'api.html' %}
+        </div>
+
       <div class="row">
         <div class="ms-3">
-       
+      
           <p class="mb-4" style="font-weight: bold; font-family:Poppins;">
            leave application system
           </p>
-        </div>
-  
+
+          <div class="export-buttons mb-2">
+            <button class="container-btn-file" onclick="window.location.href='{% url 'export_leave_requests' %}'">
+                <svg
+                fill="#fff"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 50 50"
+              >
+                <path
+                  d="M28.8125 .03125L.8125 5.34375C.339844 
+                5.433594 0 5.863281 0 6.34375L0 43.65625C0 
+                44.136719 .339844 44.566406 .8125 44.65625L28.8125 
+                49.96875C28.875 49.980469 28.9375 50 29 50C29.230469 
+                50 29.445313 49.929688 29.625 49.78125C29.855469 49.589844 
+                30 49.296875 30 49L30 1C30 .703125 29.855469 .410156 29.625 
+                .21875C29.394531 .0273438 29.105469 -.0234375 28.8125 .03125ZM32 
+                6L32 13L34 13L34 15L32 15L32 20L34 20L34 22L32 22L32 27L34 27L34 
+                29L32 29L32 35L34 35L34 37L32 37L32 44L47 44C48.101563 44 49 
+                43.101563 49 42L49 8C49 6.898438 48.101563 6 47 6ZM36 13L44 
+                13L44 15L36 15ZM6.6875 15.6875L11.8125 15.6875L14.5 21.28125C14.710938 
+                21.722656 14.898438 22.265625 15.0625 22.875L15.09375 22.875C15.199219 
+                22.511719 15.402344 21.941406 15.6875 21.21875L18.65625 15.6875L23.34375 
+                15.6875L17.75 24.9375L23.5 34.375L18.53125 34.375L15.28125 
+                28.28125C15.160156 28.054688 15.035156 27.636719 14.90625 
+                27.03125L14.875 27.03125C14.8125 27.316406 14.664063 27.761719 
+                14.4375 28.34375L11.1875 34.375L6.1875 34.375L12.15625 25.03125ZM36 
+                20L44 20L44 22L36 22ZM36 27L44 27L44 29L36 29ZM36 35L44 35L44 37L36 37Z"
+                ></path>
+              </svg>
+              Export Leave Requests
+            </button>
+          
+            <button class="container-btn-file" onclick="window.location.href='{% url 'export_leave_approvals' %}'">
+                <svg
+                fill="#fff"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 50 50"
+              >
+                <path
+                  d="M28.8125 .03125L.8125 5.34375C.339844 
+                5.433594 0 5.863281 0 6.34375L0 43.65625C0 
+                44.136719 .339844 44.566406 .8125 44.65625L28.8125 
+                49.96875C28.875 49.980469 28.9375 50 29 50C29.230469 
+                50 29.445313 49.929688 29.625 49.78125C29.855469 49.589844 
+                30 49.296875 30 49L30 1C30 .703125 29.855469 .410156 29.625 
+                .21875C29.394531 .0273438 29.105469 -.0234375 28.8125 .03125ZM32 
+                6L32 13L34 13L34 15L32 15L32 20L34 20L34 22L32 22L32 27L34 27L34 
+                29L32 29L32 35L34 35L34 37L32 37L32 44L47 44C48.101563 44 49 
+                43.101563 49 42L49 8C49 6.898438 48.101563 6 47 6ZM36 13L44 
+                13L44 15L36 15ZM6.6875 15.6875L11.8125 15.6875L14.5 21.28125C14.710938 
+                21.722656 14.898438 22.265625 15.0625 22.875L15.09375 22.875C15.199219 
+                22.511719 15.402344 21.941406 15.6875 21.21875L18.65625 15.6875L23.34375 
+                15.6875L17.75 24.9375L23.5 34.375L18.53125 34.375L15.28125 
+                28.28125C15.160156 28.054688 15.035156 27.636719 14.90625 
+                27.03125L14.875 27.03125C14.8125 27.316406 14.664063 27.761719 
+                14.4375 28.34375L11.1875 34.375L6.1875 34.375L12.15625 25.03125ZM36 
+                20L44 20L44 22L36 22ZM36 27L44 27L44 29L36 29ZM36 35L44 35L44 37L36 37Z"
+                ></path>
+              </svg>
+              Export Leave Approvals
+            </button>
+          
+            <button class="container-btn-file" onclick="window.location.href='{% url 'export_employees' %}'">
+                <svg
+                fill="#fff"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 50 50"
+              >
+                <path
+                  d="M28.8125 .03125L.8125 5.34375C.339844 
+                5.433594 0 5.863281 0 6.34375L0 43.65625C0 
+                44.136719 .339844 44.566406 .8125 44.65625L28.8125 
+                49.96875C28.875 49.980469 28.9375 50 29 50C29.230469 
+                50 29.445313 49.929688 29.625 49.78125C29.855469 49.589844 
+                30 49.296875 30 49L30 1C30 .703125 29.855469 .410156 29.625 
+                .21875C29.394531 .0273438 29.105469 -.0234375 28.8125 .03125ZM32 
+                6L32 13L34 13L34 15L32 15L32 20L34 20L34 22L32 22L32 27L34 27L34 
+                29L32 29L32 35L34 35L34 37L32 37L32 44L47 44C48.101563 44 49 
+                43.101563 49 42L49 8C49 6.898438 48.101563 6 47 6ZM36 13L44 
+                13L44 15L36 15ZM6.6875 15.6875L11.8125 15.6875L14.5 21.28125C14.710938 
+                21.722656 14.898438 22.265625 15.0625 22.875L15.09375 22.875C15.199219 
+                22.511719 15.402344 21.941406 15.6875 21.21875L18.65625 15.6875L23.34375 
+                15.6875L17.75 24.9375L23.5 34.375L18.53125 34.375L15.28125 
+                28.28125C15.160156 28.054688 15.035156 27.636719 14.90625 
+                27.03125L14.875 27.03125C14.8125 27.316406 14.664063 27.761719 
+                14.4375 28.34375L11.1875 34.375L6.1875 34.375L12.15625 25.03125ZM36 
+                20L44 20L44 22L36 22ZM36 27L44 27L44 29L36 29ZM36 35L44 35L44 37L36 37Z"
+                ></path>
+              </svg>
+              Export Employees
+            </button>
+          </div>
         
       <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -42,99 +152,224 @@
         }
 
        
+        .export-buttons {
+  display: flex;
+  gap: 1em; /* Space between buttons */
+  /*  Center the buttons horizontally */
+  flex-wrap: nowrap; /* Prevent wrapping to a new line */
+}
+
+.container-btn-file {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  background-color: #307750;
+  color: #fff;
+  border: none;
+  padding: 0.5em 1em; /* Adjust padding for a smaller size */
+  border-radius: 0.5em;
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 4px 8px 10px -3px rgba(0, 0, 0, 0.356);
+  transition: all 250ms;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.container-btn-file > svg {
+  margin-right: 0.5em; /* Add spacing between icon and text */
+  width: 16px;
+  height: 16px;
+}
+
+.container-btn-file:hover {
+  background-color: #469b61; /* Slightly brighter green on hover */
+}
+
+
+.container-btn-file input[type="file"] {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+.container-btn-file > svg {
+  margin-right: 0.5em; /* Adjust spacing */
+  width: 16px; /* Smaller icon */
+  height: 16px; /* Smaller icon */
+}
+.container-btn-file::before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 0;
+  border-radius: 0.5em;
+  background-color: #469b61;
+  z-index: -1;
+  transition: all 350ms;
+}
+.container-btn-file:hover::before {
+  width: 100%;
+}
+
+       
     </style>
 
-      <div class="col-12" >
-        <div class="card my-4 mt-5">
+
+    <div class="card my-4 mt-5">
+   
+      <div class="card-body" style="background-color: #e1e2e2;">
+     
+              <style>
+                  table {
+                      width: 100%;
+                      border-collapse: collapse;
+                      margin: 20px 0;
+                      background-color: white;
+                  }
           
-          <div class="card-body" style="background-color: #e1e2e2;">
-                <style>
-               
-                    /* Form Container */
-                 
-            
-                    /* Form Header */
-                  
-            
-                    /* Form Elements */
-                    label {
-                        font-size: 0.95rem;
-                        font-weight: bold;
-                        color: #333;
-                        display: block;
-                        margin-bottom: 5px;
-                    }
-            
-                    input, textarea {
-                        width: 100%;
-                        padding: 10px;
-                        border: 1px solid #ddd;
-                        border-radius: 5px;
-                        font-size: 1rem;
-                        color: #333;
-                        margin-bottom: 15px;
-                    }
-            
-                    textarea {
-                        resize: none;
-                        height: 80px;
-                    }
-            
-                    input:focus, textarea:focus {
-                        outline: none;
-                        border-color: #0056b3;
-                        box-shadow: 0 0 5px rgba(0, 86, 179, 0.3);
-                    }
-            
-                    button {
-                        width: 100%;
-                        background-color: #0056b3;
-                        color: #fff;
-                        font-size: 1rem;
-                        padding: 10px 15px;
-                        border: none;
-                        border-radius: 5px;
-                        cursor: pointer;
-                        transition: background-color 0.3s ease;
-                    }
-            
-                    button:hover {
-                        background-color: #004494;
-                    }
-            
-                    /* Responsive Design */
-                    @media screen and (max-width: 768px) {
-                        .form-container {
-                            padding: 15px;
-                        }
-                    }
-                </style>
+                  th,
+                  td {
+                      padding: 10px;
+                      text-align: left;
+                      border: 1px solid #ddd;
+                  }
+          
+                  th {
+                      background-color: grey;
+                      color: white;
+                  }
+          
+                  tr:nth-child(even) {
+                      background-color: #f2f2f2;
+                  }
+          
+                  .status-approved {
+                      color: green;
+                      font-weight: bold;
+                      font-size: small;
+                  }
+          
+                  .status-pending {
+                      color: orange;
+                      font-weight: bold;
+                      font-size: small;
+                  }
+          
+                  .status-rejected {
+                      color: green;
+                      font-weight: bold;
+                      font-size: small;
+                  }
+          
+              
+          
+                  /* Add striped effect */
+                  tr:nth-child(odd) {
+                      background-color: #f9f9f9;
+                  }
+          
+                  /* Style the filtering input */
+                  #filterInput {
+                      margin-bottom: 20px;
+                      padding: 10px;
+                      font-size: 1rem;
+                      border: 1px solid #ddd;
+                      border-radius: 5px;
+                  }
+                  body {
+              font-family: Arial, sans-serif;
+              background-color: #f8f9fa;
+              margin: 0;
+              padding: 0;
+          }
+          .container_C {
+              
+        width: 100%;
+              margin: 50px auto;
+              background: #ffffff;
+              border-radius: 10px;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+              padding: 20px 30px;
+          }
+          h1 {
+              text-align: center;
+              color: #343a40;
+          }
+          label {
+              display: block;
+              font-weight: bold;
+              margin-bottom: 5px;
+              color: #495057;
+          }
+          .form-group {
+              margin-bottom: 20px;
+          }
+          .form-control {
+              width: 100%;
+              padding: 10px;
+              border: 1px solid #ced4da;
+              border-radius: 5px;
+              font-size: 16px;
+              box-sizing: border-box;
+          }
+          textarea.form-control {
+              resize: vertical;
+              min-height: 100px;
+          }
+          .btn {
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              width: 100%;
+              padding: 10px;
+              font-size: 16px;
+              background-color: #28a745;
+              color: #ffffff;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+              font-weight: bold;
+          }
+          .btn:hover {
+              background-color: #218838;
+          }
+          .btn i {
+              margin-right: 8px;
+          }
+              </style>
+          </head>
+          
+          
             
                 <h3 class="mb-0 h4 font-weight-bolder" style="font-weight: bold; font-family:Poppins;">
-                    <img src="{% static 'mw.png' %}" class="navbar-brand-img" width="26" height="26" alt="main_logo">
-                    Opc Leave Application</h3>
-                <form action="{% url 'submit_leave_request' %}" method="POST" class="leave-form">
-                    {% csrf_token %}
-                    
-                    <label for="start_date">Start Date:</label>
-                    <input type="date" id="start_date" name="start_date" required><br><br>
-                
-                    <label for="end_date">End Date:</label>
-                    <input type="date" id="end_date" name="end_date" required><br><br>
-                
-                    <label for="number_of_days">Number of Days:</label>
-                    <input type="number" id="number_of_days" name="number_of_days" required><br><br>
-                
-                    <label for="contact_address">Contact Address During Leave:</label>
-                    <textarea id="contact_address" name="contact_address_during_leave" rows="4" cols="50"></textarea><br><br>
-                
-                    <label for="leave_grant">Leave Grant Requested:</label>
-                    <input type="text" id="leave_grant" name="leave_grant_requested"><br><br>
-                
-               
-                        <button type="submit" class="btn btn-success btn-sm">Request Leave</button>
-       
-                </form>
+                   
+                    Supervisor Leave Application</h3>
+                    <form method="POST" style="margin: 10px; padding: 8px;">
+                      {% csrf_token %}
+                      <div class="form-group mb-2">
+                          <label for="start_date"><i class="fas fa-calendar-day"></i> Start Date:</label>
+                          <input type="date" name="start_date" class="form-control form-control-sm" required>
+                      </div>
+                      <div class="form-group mb-2">
+                          <label for="end_date"><i class="fas fa-calendar-check"></i> End Date:</label>
+                          <input type="date" name="end_date" class="form-control form-control-sm" required>
+                      </div>
+                      <div class="form-group mb-2">
+                          <label for="contact_address_during_leave"><i class="fas fa-map-marker-alt"></i> Contact Address During Leave:</label>
+                          <textarea name="contact_address_during_leave" class="form-control form-control-sm"></textarea>
+                      </div>
+                      <div class="form-group mb-2">
+                          <label for="leave_grant_requested"><i class="fas fa-clipboard-list"></i> Leave Grant Requested:</label>
+                          <input type="text" name="leave_grant_requested" class="form-control form-control-sm">
+                      </div>
+                      <button type="submit" class="btn btn-success btn-sm">
+                          <i class="fas fa-paper-plane"></i> Submit
+                      </button>
+                  </form>
+                  
                 
                 </div>
             </body>

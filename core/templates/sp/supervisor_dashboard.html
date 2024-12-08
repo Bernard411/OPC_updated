@@ -5,17 +5,30 @@
   {% include 'side2.html' %}
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
     <!-- Navbar -->
-    
     {% include 'nav3.html' %}
+
+    
     <!-- End Navbar -->
     <div class="container-fluid py-2">
+        <div class="row">
+            <div class="">
+                <h3 class="mb-0 h4 font-weight-bolder">  <img src="{% static 'mw.png' %}" class="navbar-brand-img" width="26" height="26" alt="main_logo"> leave application system</h3>
+                <p class="mb-4">
+                    Employee leave summary and details.
+                </p>
+            </div>
+            
+            <!-- Employee Details Card -->
+            {% include 'api.html' %}
+        </div>
+
       <div class="row">
         <div class="ms-3">
-       
+      
           <p class="mb-4" style="font-weight: bold; font-family:Poppins;">
            leave application system
           </p>
-   
+
           <div class="export-buttons mb-2">
             <button class="container-btn-file" onclick="window.location.href='{% url 'export_leave_requests' %}'">
                 <svg
@@ -129,6 +142,7 @@
             }
         });
     </script>
+
 
     <style>
         body {

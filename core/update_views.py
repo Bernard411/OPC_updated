@@ -111,13 +111,49 @@ def add_leave_request_sp_x(request):
                 )
                 leave_request.save()
 
-                return redirect('sp_dashboard')  # Redirect to the dashboard after submitting the request
+                return redirect('supervisor_dashboard')  # Redirect to the dashboard after submitting the request
             except ValueError as e:
                 # Handle invalid date format or start > end date
-                return render(request, 'sp/leave_requests.html', {'error': str(e)})
+                return render(request, 'sp/request_leave.html', {'error': str(e)})
 
-    return render(request, 'sp/leave_requests.html')
+    return render(request, 'sp/request_leave.html')
 
+@login_required
+def add_leave_request_adm_x(request):
+    if request.method == 'POST':
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        contact_address_during_leave = request.POST.get('contact_address_during_leave')
+        leave_grant_requested = request.POST.get('leave_grant_requested')
+
+        if start_date and end_date:
+            # Ensure the dates are valid
+            try:
+                start_date = timezone.datetime.strptime(start_date, "%Y-%m-%d").date()
+                end_date = timezone.datetime.strptime(end_date, "%Y-%m-%d").date()
+
+                if start_date > end_date:
+                    raise ValueError("Start date cannot be later than end date")
+
+                # Create the leave request object
+                leave_request = LeaveRequest(
+                    employee=request.user.employee,  # Assuming the user has a one-to-one Employee relationship
+                    start_date=start_date,
+                    end_date=end_date,
+                    contact_address_during_leave=contact_address_during_leave,
+                    leave_grant_requested=leave_grant_requested,
+                    status="Pending",  # Initial status is Pending
+                    submission_date=timezone.now(),
+                    user=request.user
+                )
+                leave_request.save()
+
+                return redirect('ad_dash')  # Redirect to the dashboard after submitting the request
+            except ValueError as e:
+                # Handle invalid date format or start > end date
+                return render(request, 'admin_z/request_leave.html', {'error': str(e)})
+
+    return render(request, 'admin_z/request_leave.html')
 
 @login_required
 def add_leave_request_hd_x(request):
@@ -149,12 +185,12 @@ def add_leave_request_hd_x(request):
                 )
                 leave_request.save()
 
-                return redirect('hd_dashboard')  # Redirect to the dashboard after submitting the request
+                return redirect('head_of_section_dashboard')  # Redirect to the dashboard after submitting the request
             except ValueError as e:
                 # Handle invalid date format or start > end date
-                return render(request, 'hd/leave_requests.html', {'error': str(e)})
+                return render(request, 'hd/request_leave.html', {'error': str(e)})
 
-    return render(request, 'hd/leave_requests.html')
+    return render(request, 'hd/request_leave.html')
 
 
 # View to show the dashboard with annual leave and approved leave days
