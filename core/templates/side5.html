@@ -42,12 +42,84 @@
       </li>
 
       <li class="nav-item">
-        <a href="{% url 'add_leave_request_adm' %}" class="nav-link text-dark  {% if request.path == '/leave/request/adm/' %}active  bg-gradient-dark text-white {% endif %}">
+        <a href="{% url 'add_leave_request_adm' %}" class="nav-link text-dark  {% if request.path == '/add_leave_request_adz/' %}active  bg-gradient-dark text-white {% endif %}">
           <i class="material-symbols-rounded opacity-5">table_view</i>
           <span class="nav-link-text ms-1">Request Leave</span>
         </a>
       </li>
-      
+      <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+           
+            font-size: small;
+        }
+
+       
+        .export-buttons {
+  display: flex;
+  gap: 1em; /* Space between buttons */
+  /*  Center the buttons horizontally */
+  flex-wrap: nowrap; /* Prevent wrapping to a new line */
+}
+
+.container-btn-file {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  background-color: #307750;
+  color: #fff;
+  border: none;
+  padding: 0.5em 1em; /* Adjust padding for a smaller size */
+  border-radius: 0.5em;
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 4px 8px 10px -3px rgba(0, 0, 0, 0.356);
+  transition: all 250ms;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.container-btn-file > svg {
+  margin-right: 0.5em; /* Add spacing between icon and text */
+  width: 16px;
+  height: 16px;
+}
+
+.container-btn-file:hover {
+  background-color: #469b61; /* Slightly brighter green on hover */
+}
+
+
+.container-btn-file input[type="file"] {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+.container-btn-file > svg {
+  margin-right: 0.5em; /* Adjust spacing */
+  width: 16px; /* Smaller icon */
+  height: 16px; /* Smaller icon */
+}
+.container-btn-file::before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 0;
+  border-radius: 0.5em;
+  background-color: #469b61;
+  z-index: -1;
+  transition: all 350ms;
+}
+.container-btn-file:hover::before {
+  width: 100%;
+}
+
+       
+    </style>
       <!-- <li class="nav-item">
         <a href="{% url 'leave_request_form' %}" class="nav-link text-dark {% if request.path == '/leave-requestx/' %}active bg-gradient-dark text-white {% endif %}">
           <i class="material-symbols-rounded opacity-5">event_available</i>

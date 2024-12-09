@@ -58,6 +58,7 @@ urlpatterns = [
     path('add_leave_request_sp/', update_views.add_leave_request_sp_x, name='add_leave_request_sp'),
     path('add_leave_request_hd/', update_views.add_leave_request_hd_x, name='add_leave_request_hd'),
     path('add_leave_request_adz/', update_views.add_leave_request_adm_x, name='add_leave_request_adm'),
+    path('hr-approved-leave-requests/', views.hr_approved_leave_requests, name='hr_approved_leave_requests'),
 
     
 

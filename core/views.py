@@ -814,7 +814,7 @@ def register(request):
                 # Log the user in and redirect to the appropriate dashboard
                 login(request, user)
                 messages.success(request, 'Registration successful! You are now logged in.')
-                return redirect('ad_dash')
+                return redirect('employee_list')
     else:
         form = RegistrationForm()
 
@@ -942,7 +942,7 @@ def login_view(request):
                 elif employee.post and employee.post.role_name == 'Employee':
                     return redirect('homepage')
                 elif employee.post and employee.post.role_name == 'System Administrator':
-                    return redirect('ad_dash')
+                    return redirect('employee_list')
 
             except Employee.DoesNotExist:
                 # If the user doesn't have an associated Employee record, redirect to the Django admin dashboard
@@ -1696,3 +1696,35 @@ def leave_countdown_api(request):
         })
 
     return JsonResponse({'leave_countdowns': countdowns})
+
+
+from django.shortcuts import render
+from .models import LeaveRequest, LeaveApproval
+from datetime import date
+
+from django.shortcuts import render
+from .models import LeaveRequest, LeaveApproval, Role
+from datetime import date
+
+def hr_approved_leave_requests(request):
+    # Filter leave requests with the status 'Approved' by HR
+    approved_leaves = LeaveRequest.objects.filter(
+        leaveapproval__approval_status='Approved',
+        leaveapproval__approver_role__role_name='HR'  # Correct field for role name
+    )
+
+    # Prepare data for rendering with countdown or expired status
+    leave_data = []
+    today = date.today()
+
+    for leave in approved_leaves:
+        leave_days = leave.calculate_leave_days()
+        # Check if the leave end date has passed
+        is_expired = leave.end_date < today
+        leave_data.append({
+            'leave_request': leave,
+            'leave_days': leave_days,
+            'is_expired': is_expired,
+        })
+
+    return render(request, 'hr/approved_leave_requests.html', {'leave_data': leave_data})

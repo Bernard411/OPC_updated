@@ -16,7 +16,14 @@
       <li class="nav-item">
         <a href="{% url 'hr_dashboard' %}" class="nav-link text-dark {% if request.path == '/hr-dashboard/' %}active bg-gradient-dark text-white {% endif %}">
           <i class="material-symbols-rounded opacity-5">dashboard</i>
-          <span class="nav-link-text ms-1">Requests</span>
+          <span class="nav-link-text ms-1">Home</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{% url 'hr_approved_leave_requests' %}" class="nav-link text-dark {% if request.path == '/hr-approved-leave-requests/' %}active bg-gradient-dark text-white {% endif %}">
+          <i class="material-symbols-rounded opacity-5">event_available</i>
+          <span class="nav-link-text ms-1">Approved Request</span>
         </a>
       </li>
 
@@ -26,6 +33,8 @@
           <span class="nav-link-text ms-1">Request Leave</span>
         </a>
       </li>
+
+
       
       <!-- <li class="nav-item">
         <a href="{% url 'register' %}" class="nav-link text-dark {% if request.path == '/register/' %}active bg-gradient-dark text-white {% endif %}">

@@ -2,10 +2,10 @@
 
 {% include 'head.html' %}
 <body class="g-sidenav-show  bg-gray-100" style="zoom: 60%;">
-  {% include 'side5.html' %}
+  {% include 'side3.html' %}
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
     <!-- Navbar -->
-    {% include 'nav4.html' %}
+    {% include 'nav1.html' %}
 
     
     <!-- End Navbar -->
@@ -217,10 +217,19 @@
        
     </style>
 
+<span style="font-weight: bold;">
+    <i class="fa fa-filter" aria-hidden="true"></i> Filter Data
+</span>
 
+
+<input type="text" id="searchInput" onkeyup="filterTable()" class="w-100 " placeholder="Search for leave requests...">
     <div class="card my-4 mt-5">
    
       <div class="card-body" style="background-color: #e1e2e2;">
+        <h3 class="mb-0 h4 font-weight-bolder" style="font-weight: bold; font-family:Poppins;">
+          
+            Approved - Leave Requests</h3>
+     
      
               <style>
                   table {
@@ -279,153 +288,178 @@
                       border: 1px solid #ddd;
                       border-radius: 5px;
                   }
-                  body {
-              font-family: Arial, sans-serif;
-              background-color: #f8f9fa;
-              margin: 0;
-              padding: 0;
-          }
-          .container_C {
-              
-        width: 100%;
-              margin: 50px auto;
-              background: #ffffff;
-              border-radius: 10px;
-              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-              padding: 20px 30px;
-          }
-          h1 {
-              text-align: center;
-              color: #343a40;
-          }
-          label {
-              display: block;
-              font-weight: bold;
-              margin-bottom: 5px;
-              color: #495057;
-          }
-          .form-group {
-              margin-bottom: 20px;
-          }
-          .form-control {
-              width: 100%;
-              padding: 10px;
-              border: 1px solid #ced4da;
-              border-radius: 5px;
-              font-size: 16px;
-              box-sizing: border-box;
-          }
-          textarea.form-control {
-              resize: vertical;
-              min-height: 100px;
-          }
-          .btn {
-              display: inline-flex;
-              align-items: center;
-              justify-content: center;
-              width: 100%;
-              padding: 10px;
-              font-size: 16px;
-              background-color: #28a745;
-              color: #ffffff;
-              border: none;
-              border-radius: 5px;
-              cursor: pointer;
-              font-weight: bold;
-          }
-          .btn:hover {
-              background-color: #218838;
-          }
-          .btn i {
-              margin-right: 8px;
-          }
               </style>
           </head>
           
           
-            
-                <h3 class="mb-0 h4 font-weight-bolder" style="font-weight: bold; font-family:Poppins;">
-                   
-                  System Admin - Leave Application</h3>
-                    <form method="POST" style="margin: 10px; padding: 8px;">
-                      {% csrf_token %}
-                      <div class="form-group mb-2">
-                          <label for="start_date"><i class="fas fa-calendar-day"></i> Start Date:</label>
-                          <input type="date" name="start_date" class="form-control form-control-sm" required>
-                      </div>
-                      <div class="form-group mb-2">
-                          <label for="end_date"><i class="fas fa-calendar-check"></i> End Date:</label>
-                          <input type="date" name="end_date" class="form-control form-control-sm" required>
-                      </div>
-                      <div class="form-group mb-2">
-                          <label for="contact_address_during_leave"><i class="fas fa-map-marker-alt"></i> Contact Address During Leave:</label>
-                          <textarea name="contact_address_during_leave" class="form-control form-control-sm"></textarea>
-                      </div>
-                      <div class="form-group mb-2">
-                          <label for="leave_grant_requested"><i class="fas fa-clipboard-list"></i> Leave Grant Requested:</label>
-                          <input type="text" name="leave_grant_requested" class="form-control form-control-sm">
-                      </div>
-                      <button type="submit" class="btn btn-success btn-sm">
-                          <i class="fas fa-paper-plane"></i> Submit
-                      </button>
-                  </form>
-                  
-                
-                </div>
-            </body>
-            </html>
-          </div>
+    <!-- Search Input -->
 
-          <style>
-            /* Form container */
-            .leave-form {
-               
-                margin: 20px auto;
-                padding: 20px;
-                background-color: #f9f9f9;
-                border-radius: 8px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow applied here */
-            }
-        
-            /* Form inputs and textareas */
-            .leave-form input,
-            .leave-form textarea {
-                width: 100%;
-                padding: 10px;
-                border: 1px solid #ddd;
-                border-radius: 5px;
-                font-size: 1rem;
-                color: #333;
-                margin-bottom: 15px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Box shadow for inputs */
-            }
-        
-            .leave-form input:focus,
-            .leave-form textarea:focus {
-                outline: none;
-                border-color: #0056b3;
-                box-shadow: 0 0 5px rgba(0, 86, 179, 0.3); /* Focused state shadow */
-            }
-        
-            /* Button styling */
-            .leave-form button {
-                width: 100%;
-                background-color: #0056b3;
-                color: #fff;
-                font-size: 1rem;
-                padding: 10px 15px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-            }
-        
-            .leave-form button:hover {
-                background-color: #004494;
-            }
-        </style>
-        
+<!-- Your Leave Requests Table -->
+<div class="table-responsive">
 
+
+        >
+        <!-- Table to display leave requests -->
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Days Approved</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leave in leave_data %}
+                    <tr class="{% if leave.is_expired %}expired{% endif %}">
+                        <td>{{ leave.leave_request.employee.name }}</td>
+                        <td>{{ leave.leave_request.start_date }}</td>
+                        <td>{{ leave.leave_request.end_date }}</td>
+                        <td>{{ leave.leave_days }} days</td>
+                        <td>
+                            {% if leave.is_expired %}
+                                <span class="badge bg-danger">Expired</span>
+                            {% else %}
+                                <span class="badge bg-success">Approved</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    
+    
+</div>
+
+<!-- JavaScript to Filter Table -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        function filterTable() {
+            var input, filter, table, tr, td, i, j, txtValue;
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("employee-table");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows (skipping the header row)
+            for (i = 1; i < tr.length; i++) {
+                tr[i].style.display = "none";  // Initially hide row
+                td = tr[i].getElementsByTagName("td");
+
+                // Loop through each cell in the row
+                for (j = 0; j < td.length - 1; j++) {  // Exclude the Actions column
+                    if (td[j]) {
+                        txtValue = td[j].textContent || td[j].innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                            break;  // If a match is found, show the row
+                        }
+                    }
+                }
+            }
+        }
+
+        // Bind the search function to the input
+        document.getElementById("searchInput").addEventListener('keyup', filterTable);
+    });
+</script>
+
+          <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">&laquo;</span>
+                </li>
+                {% endif %}
+    
+                {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+                {% endfor %}
+    
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">&raquo;</span>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    <style>
+        /* Change active pagination color to blue */
+        .pagination .page-item.active .page-link {
+            background-color: #007bff !important; /* Bootstrap primary blue */
+            border-color: #007bff !important;
+            color: white !important;
+        }
+    
+        /* Custom hover effect for pagination links */
+        .pagination .page-link:hover {
+            background-color: #0056b3; /* Darker blue for hover */
+            color: white;
+        }
+    
+        /* Custom focus style */
+        .pagination .page-link:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+    </style>   
+          </body>
+          
+          </html>
+          
+<style>
+    .search-box {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.pagination button.active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.pagination button:hover {
+    background-color: #0056b3;
+    color: #fff;
+    border-color: #0056b3;
+}
+
+</style>
             </div>
           </div>
         </div>
@@ -451,5 +485,3 @@
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="{% static 'assets/js/material-dashboard.min.js' %}"></script>
-</body>
-

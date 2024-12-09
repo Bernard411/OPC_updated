@@ -227,8 +227,8 @@
    
       <div class="card-body" style="background-color: #e1e2e2;">
         <h3 class="mb-0 h4 font-weight-bolder" style="font-weight: bold; font-family:Poppins;">
-            <img src="{% static 'mw.png' %}" class="navbar-brand-img" width="26" height="26" alt="main_logo">
-            HR Dashboard - Leave Requests</h3>
+          
+           My Leave Requests</h3>
      
      
               <style>
@@ -305,7 +305,7 @@
                 <th>Status</th>
                 <th>Supervisor Approval</th>
                 <th>Head Approval</th>
-                <th>Actions</th>
+               
             </tr>
         </thead>
         <tbody>
@@ -329,11 +329,7 @@
                         Pending
                     {% endif %}
                 </td>
-                <td>
-                    {% if request.status == 'Pending' %}
-                        <a href="{% url 'hr_approval' request.id %}" class="btn btn-success btn-sm">Approve / Reject</a>
-                    {% endif %}
-                </td>
+               
             </tr>
             {% endfor %}
         </tbody>
